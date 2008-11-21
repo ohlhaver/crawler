@@ -2260,7 +2260,7 @@ while($running) do
        language = 1
        @feedpages = Feedpage.find(:all, :conditions => 'Active = 1')  
        @feedpages = @feedpages.find_all{|l| l.language == 1 }
-       @feedpages = @feedpages.find_all{|l| l.video == false }
+       @feedpages = @feedpages.find_all{|l| l.video != true  }
 
 
        @feedpages.each do |page| 

@@ -12,7 +12,10 @@ end
 
 while($running) do
   
-  def read_page page_source_name, item
+  def read_page page_source_name, item, item_link
+    require 'hpricot'
+    require 'open-uri'
+    require 'iconv'
 
         if page_source_name == 'www.cnn.com' 
          doc = ''
@@ -176,7 +179,6 @@ while($running) do
           end
 
       end
-
       return author, text
   end
 
@@ -211,7 +213,7 @@ while($running) do
                       @story = Rawstory.create(:link => item.link)
              
                       
-                      author, text, title, opinionated = read_page page.source.name, item
+                      author, text, title, opinionated = read_page page.source.name, item, item.link
                       title = item.title if title == nil
                       author = '' if author == nil
                       text = text + ' ' + author
