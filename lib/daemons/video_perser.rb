@@ -18,6 +18,16 @@ while($running) do
          doc = ''
           a= read_cnn doc, item
         end
+        
+        if page_source_name == 'www.reuters.com' 
+         doc = ''
+          a= read_reuters doc, item
+        end
+
+        if page_source_name == 'news.bbc.co.uk' 
+         doc =Hpricot(open(item_link))
+          a= read_bbc doc, item
+        end
 
         return a
   end
@@ -84,6 +94,87 @@ while($running) do
           name_2 = atext_array[1]
           author = name_1.to_s + ' ' + name_2.to_s
         end
+      end
+
+      return author, text
+  end
+  
+  def read_reuters doc, item
+
+    text = item.description
+        unless text == nil
+
+           text = text.sub('div class', '+') 
+
+            text = text.gsub(' ', 'LUECKE1')
+            text = text.gsub(',', 'LUECKE2')
+            text = text.gsub('.', 'LUECKE3')
+            text = text.gsub("'", 'LUECKE5')
+            text = text.gsub('"', 'LUECKE6')
+           
+
+            text = text.gsub('+', ' ')
+            text_array = text.scan(/\w+/)
+            text = text_array[1]
+            text = text.gsub('LUECKE1', ' ')
+            text = text.gsub('LUECKE2', ',')
+            text = text.gsub('LUECKE3', '.')
+
+            text = text.gsub('LUECKE5', "'")
+            text = text.gsub('LUECKE6', '"')
+
+          text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+      end
+      author = ''
+
+
+      return author, text
+  end
+
+  def read_bbc doc, item
+
+    text = (doc/"div.storybody").inner_text
+
+    second_paragraph = (doc/"div.storybody/p[2]").inner_text 
+
+    if second_paragraph.match('report') or second_paragraph.match('story') 
+      author = second_paragraph
+    else
+      author = (doc/"div.storybody/p[3]").inner_text
+            
+    end
+
+
+        unless author == ''
+          author_array = author.scan(/\w+/) 
+         first_name = author_array[0]
+         last_name = author_array[1]
+         author = first_name + ' ' + last_name
+        end
+
+        unless text == nil
+
+          text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
       end
 
       return author, text
