@@ -1,0 +1,3 @@
+class HaufensController < ApplicationController
+
+end

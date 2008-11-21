@@ -1,0 +1,10 @@
+<h2>Stories published by <%= link_to @feedpage.source.name, @feedpage.source %> <%= ' > ' +  @feedpage.publication %> </h2>
+
+<%= 'OPINIONATED' if @feedpage.opinionated == 1 %>
+<%= link_to 'de-opinionate!', :controller => 'feedpages', :action => 'deopinionate', :id => @feedpage.id if @feedpage.opinionated == 1 %>
+<%= link_to 'opinionate!', :controller => 'feedpages', :action => 'opinionate', :id => @feedpage.id if @feedpage.opinionated != 1 && @feedpage.publication != '' %>
+
+<br><br>
+<div id="rawstories_published">
+  <%= render :partial => @rawstories_published %>
+</div>

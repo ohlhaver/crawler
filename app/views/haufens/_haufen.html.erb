@@ -1,0 +1,17 @@
+<% div_for(@haufens) do %>
+Id:  <%= haufen.id %> 
+Weight:  <%= haufen.weight %>
+Broadness:  <%= haufen.broadness %>
+
+Pilot: <%= haufen.pilot %>
+Topic: <%= haufen.topic %>
+
+<% @haufen_stories =[] %>
+<% member_array = haufen.members.split(/\ /) %>
+<% member_array.each do |member| %>
+<% @haufen_stories += Rawstory.find(member).to_a %>
+<% end %>
+<% end %>
+<%= render :partial => @haufen_stories %>
+
+<br><br>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  weight: 1
+  pilot: 1
+  topic: 1
+  hsession_id: 1
+
+two:
+  weight: 1
+  pilot: 1
+  topic: 1
+  hsession_id: 1

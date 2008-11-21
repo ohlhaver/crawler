@@ -1,0 +1,2 @@
+class EintragsController < ApplicationController
+end

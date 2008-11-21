@@ -1,0 +1,17 @@
+<p><%=link_to @rawstory.source.name, @rawstory.source %><%= ' > '%><%=link_to @rawstory.feedpage.publication, @rawstory.feedpage %></p>
+<h4>
+<%= @rawstory.title %><%= ' (opinion)' if @rawstory.opinion == 1 %>
+</h4>
+<p>
+<%=link_to @rawstory.author.name, @rawstory.author %><%= ' - ' if @rawstory.author.name != '' %> <%= 'opinionated' if @rawstory.author.opinionated == 1 %>
+<%= link_to 'de-opinionate!', :controller => 'authors', :action => 'deopinionate', :id => @rawstory.author.id if @rawstory.author.opinionated == 1 %>
+<%= link_to 'opinionate!', :controller => 'authors', :action => 'opinionate', :id => @rawstory.author.id if @rawstory.author.opinionated != 1 && @rawstory.author.name != '' %></p>
+
+
+<p>
+<%= @rawstory.body %>
+</p>
+
+<p>
+<%= link_to @rawstory.link, @rawstory.link %>
+</p>

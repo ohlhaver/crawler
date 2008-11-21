@@ -1,0 +1,2 @@
+module RawstoriesHelper
+end

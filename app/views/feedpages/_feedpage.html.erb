@@ -1,0 +1,28 @@
+<% div_for(feedpage) do %>
+ <h4> <%= link_to feedpage.publication, feedpage %>
+
+- <%= link_to '>>', feedpage.url  %> -- <%= 'active' if feedpage.Active == 1 %><%= 'inactive' if feedpage.Active != 1 %> <%= link_to 'activate', :controller => 'feedpages', :action => 'activate', :id => feedpage.id if feedpage.Active != 1 %><%= link_to 'deactivate', :controller => 'feedpages', :action => 'deactivate', :id => feedpage.id if feedpage.Active == 1 %> <%= '  --  ' %>
+<%= link_to 'reset', {:controller => 'feedpages', :action => 'empty', :id => feedpage.id}, :confirm => 'Delete all stories from ' + feedpage.publication + ' ?', :post => true %><%= ' -- Size: ' + feedpage.rawstories.size.to_s + ' -- Added: ' +  (feedpage.rawstories.size.to_i - feedpage.previous_size.to_i).to_s + ' -- ' %> 
+
+<%= link_to 'remove', {:controller => 'feedpages', :action => 'remove', :id => feedpage.id}, :confirm => 'Remove ' + feedpage.publication + ' feedpage completely?', :post => true %> - <%= 'English' if feedpage.language == 1 %> <%= 'deutsch' if feedpage.language == 2 %> - 
+
+
+<%= 'Any topic' if feedpage.topic == 1 %><%= 'Politics' if feedpage.topic == 2 %><%= 'Culture' if feedpage.topic == 3 %><%= 'Science' if feedpage.topic == 4 %><%= 'Business' if feedpage.topic == 5 %><%= 'Sport' if feedpage.topic == 6 %><%= 'Mixed' if feedpage.topic == 7 %> <%= 'Humor' if feedpage.topic == 8 %><%= 'Technology' if feedpage.topic == 9 %>-
+
+
+<%= 'general' if feedpage.opinionated != 1 %> <%= 'opinions' if feedpage.language == 1 %> 
+
+<% form_for feedpage do |f| %>
+<% languages = {'English' => 1, 'deutsch' => 2} %>
+<%= select_tag(:language, options_for_select(languages, params[:language] ))  %>
+
+<% topics = {'Any topic' => 1, 'Politics' => 2, 'Business' => 5, 'Culture' => 3, 'Science' => 4, 'Sport' => 6, 'Mixed' => 7, 'Humor' => 8, 'Technology' => 9 } %>
+<%= select_tag(:topic, options_for_select(topics, params[:topic]))  %>
+
+<% types = {'All' => 0, 'Only opinions' => 1} %>
+<%= select_tag(:opinionated, options_for_select(types, params[:opinionated] ))  %>
+
+<%= submit_tag %>
+
+<% end %>
+<% end %>

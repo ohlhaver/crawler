@@ -1,0 +1,9 @@
+<h2>Stories published by <%= @author.name %></h2>
+
+<%= 'opinionated' if @author.opinionated == 1 %>
+<%= link_to 'de-opinionate!', :controller => 'authors', :action => 'deopinionate', :id => @author.id if @author.opinionated == 1 %>
+<%= link_to 'opinionate!', :controller => 'authors', :action => 'opinionate', :id => @author.id if @author.opinionated != 1 && @author.name != '' %>
+
+<div id="rawstories_published">
+  <%= render :partial => @rawstories_published %>
+</div>

@@ -1,0 +1,27 @@
+
+Feedpage
+<p>
+  url: <%= @feedpage.url %>
+  publication: <%= @feedpage.publication %>
+  website: <%= @feedpage.website %>
+</p>
+
+<%= 'English' if feedpage.language == 1 %> <%= 'deutsch' if feedpage.language == 2 %> - 
+<%= 'Any topic' if feedpage.topic == 1 %><%= 'Politics' if feedpage.topic == 2 %><%= 'Culture' if feedpage.topic == 3 %><%= 'Science' if feedpage.topic == 4 %><%= 'Business' if feedpage.topic == 5 %><%= 'Sport' if feedpage.topic == 6 %><%= 'Mixed' if feedpage.topic == 7 %> -
+<%= 'general' if feedpage.opinionated != 1 %> <%= 'opinions' if feedpage.language == 1 %>
+
+
+<% languages = {'English' => 1, 'deutsch' => 2} %>
+<%= select_tag(:language, options_for_select(languages, params[:language] ))  %>
+
+<% topics = {'Any topic' => 1, 'Politics' => 2, 'Business' => 5, 'Culture' => 3, 'Science' => 4, 'Sport' => 6, 'Mixed' => 7} %>
+<%= select_tag(:topic, options_for_select(topics, params[:topic]))  %>
+
+<% types = {'All' => 0, 'Only opinions' => 1} %>
+<%= select_tag(:opinionated, options_for_select(types, params[:opinionated] ))  %>
+
+
+<p>
+  <%= submit_tag %>
+</p>
+<% end %>

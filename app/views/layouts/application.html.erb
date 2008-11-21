@@ -1,0 +1,55 @@
+<% if @current_user %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xml:lang="en" lang="en">
+<%= stylesheet_link_tag 'style' %>
+
+  <head>
+	
+		<div id="login_logout">
+	        <% if @current_user %>
+	          Logged in as:
+	          <%= @current_user.login %>
+	          <em><%= link_to "(Logout)", session_path, :method => :delete %></em>
+	        <% else %>
+	          <em>Not logged in.</em>
+	          <%= link_to 'Login', :controller => 'sessions', :action => 'new' %>
+	        <% end %>
+	      </div>
+	
+	<ul id="navigation">
+		<%= link_to 'home', rawstories_path %> <%= ' - '%>
+		<%= link_to 'sources', sources_path %><%= ' - '%>
+		<%= link_to 'feedpages', feedpages_path %><%= ' - '%>
+		<%= link_to 'add feedpage', :controller => 'feedpages', :action => 'new' %><%= ' - '%>
+		<%= link_to 'authors', authors_path %><%= ' - '%>
+		<%= link_to 'group!', groups_path %>
+    </ul>
+
+<ul>
+    <% form_tag search_rawstories_path, :method => :get do -%>
+      <div id="search">
+        <%= text_field_tag :q, params[:q], :class => 'text' %>
+        <%= submit_tag 'Search', :class => 'button' %>
+      </div>
+    <% end -%>
+</ul>
+
+	</head>
+
+
+<body>
+ <div id="content">
+
+
+
+	
+
+ 
+<ul>
+
+<%end%>
+	<%= yield %>
+
+

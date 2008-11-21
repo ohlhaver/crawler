@@ -1,0 +1,5 @@
+<% div_for(author) do %>
+  <h4><%= link_to author.name, author %> <%= ' - ' if author.name != '' %> <%= 'opinionated' if author.opinionated == 1 %>
+<%= link_to 'de-opinionate!', :controller => 'authors', :action => 'deopinionate', :id => author.id if author.opinionated == 1 %>
+<%= link_to 'opinionate!', :controller => 'authors', :action => 'opinionate', :id => author.id if author.opinionated != 1 && author.name != '' %>
+<% end %>

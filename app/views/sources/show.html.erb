@@ -1,0 +1,25 @@
+<h2><%= @source.name  %> <br> <%= ' Label: ' + @source.website if @source.website != nil %></h2>
+
+<% form_for @source do |f| %>
+
+<p>
+  New source label:<br />
+  <%= f.text_field :website %>
+
+
+
+  <%= submit_tag %>
+</p>
+
+<% end %>
+Feedpages:
+
+<%= render :partial => @feedpages %>
+
+
+Stories published:
+
+
+<div id="rawstories_published">
+  <%= render :partial => @rawstories_published %>
+</div>

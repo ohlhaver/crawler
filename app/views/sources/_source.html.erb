@@ -1,0 +1,11 @@
+<% div_for(source) do %>
+  <%= link_to source.name, source %> 
+<% if source.rawstories.last != nil && params[:controller] == 'rawstories'%>
+
+<%= source.rawstories.last.created_at.to_s %>
+<b><%= ' - EXTREMELY' if (Time.now - source.rawstories.last.created_at) > 43200 %>
+<%= ' OLD' if (Time.now - source.rawstories.last.created_at) > 3600 %></b>
+<% end %>
+<br>
+
+<% end %>

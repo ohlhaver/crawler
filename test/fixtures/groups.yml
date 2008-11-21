@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  pilot: 1
+  weight: 1
+  grouping_session: 1
+
+two:
+  pilot: 1
+  weight: 1
+  grouping_session: 1

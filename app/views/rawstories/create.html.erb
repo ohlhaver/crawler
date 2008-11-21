@@ -1,0 +1,5 @@
+Unable to read these stories:
+<br><br>
+<% @uncrawled_stories.each do |story| %>
+ <b> <%= link_to story.title, story.link %> <br><br>
+<% end %>

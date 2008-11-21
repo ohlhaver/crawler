@@ -1,0 +1,11 @@
+<% div_for(@groups) do %>
+Id:  <%= group.id %> 
+Weight:  <%= group.weight %>
+Pilot: <%= group.pilot %>
+Topic: <%= group.topic %>
+
+<%= render :partial => group.rawstories %>
+
+<br><br>
+
+<% end %>
