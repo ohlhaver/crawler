@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081115124703) do
+ActiveRecord::Schema.define(:version => 20081120040844) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20081115124703) do
     t.integer  "opinionated",   :limit => 11
     t.integer  "language",      :limit => 11
     t.integer  "topic",         :limit => 11
+    t.boolean  "video"
   end
 
   create_table "groups", :force => true do |t|
@@ -69,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20081115124703) do
     t.integer  "latest",      :limit => 11
     t.integer  "broadness",   :limit => 11
     t.integer  "language",    :limit => 11
+    t.integer  "videos",      :limit => 11
   end
 
   create_table "hsessions", :force => true do |t|
@@ -99,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20081115124703) do
     t.string   "keywords"
     t.integer  "titlehash",   :limit => 11
     t.integer  "linkhash",    :limit => 11
+    t.boolean  "video"
   end
 
   add_index "rawstories", ["title"], :name => "index_rawstories_on_title", :unique => true

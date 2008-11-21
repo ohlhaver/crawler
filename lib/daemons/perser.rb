@@ -2712,6 +2712,7 @@ while($running) do
 
         @feedpages = Feedpage.find(:all, :conditions => 'Active = 1')  
         @feedpages = @feedpages.find_all{|l| l.language == 2 }
+        @feedpages = @feedpages.find_all{|l| l.video == false }
 
         @feedpages.each do |page| 
             page.previous_size = page.rawstories.size

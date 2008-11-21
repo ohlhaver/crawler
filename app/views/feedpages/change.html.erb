@@ -4,7 +4,9 @@ Feedpage
   url: <%= @feedpage.url %>
   publication: <%= @feedpage.publication %>
   website: <%= @feedpage.website %>
+  
 </p>
+<%= 'Videos' if feedpage.video == true %><br>
 
 <%= 'English' if feedpage.language == 1 %> <%= 'deutsch' if feedpage.language == 2 %> - 
 <%= 'Any topic' if feedpage.topic == 1 %><%= 'Politics' if feedpage.topic == 2 %><%= 'Culture' if feedpage.topic == 3 %><%= 'Science' if feedpage.topic == 4 %><%= 'Business' if feedpage.topic == 5 %><%= 'Sport' if feedpage.topic == 6 %><%= 'Mixed' if feedpage.topic == 7 %> -
@@ -19,6 +21,9 @@ Feedpage
 
 <% types = {'All' => 0, 'Only opinions' => 1} %>
 <%= select_tag(:opinionated, options_for_select(types, params[:opinionated] ))  %>
+
+<% types = {'All' => 0, 'Only videos' => 1} %>
+<%= select_tag(:video, options_for_select(types, params[:video] ))  %>
 
 
 <p>

@@ -10,7 +10,8 @@
 <%= 'Any topic' if feedpage.topic == 1 %><%= 'Politics' if feedpage.topic == 2 %><%= 'Culture' if feedpage.topic == 3 %><%= 'Science' if feedpage.topic == 4 %><%= 'Business' if feedpage.topic == 5 %><%= 'Sport' if feedpage.topic == 6 %><%= 'Mixed' if feedpage.topic == 7 %> <%= 'Humor' if feedpage.topic == 8 %><%= 'Technology' if feedpage.topic == 9 %>-
 
 
-<%= 'general' if feedpage.opinionated != 1 %> <%= 'opinions' if feedpage.language == 1 %> 
+<%= 'general' if feedpage.opinionated != 1 %> <%= 'opinions' if feedpage.opinionated == 1 %> 
+<%= ' - VIDEOS' if feedpage.video == true %> 
 
 <% form_for feedpage do |f| %>
 <% languages = {'English' => 1, 'deutsch' => 2} %>
@@ -21,6 +22,9 @@
 
 <% types = {'All' => 0, 'Only opinions' => 1} %>
 <%= select_tag(:opinionated, options_for_select(types, params[:opinionated] ))  %>
+
+<% types = {'All' => 0, 'Only videos' => 1} %>
+<%= select_tag(:video, options_for_select(types, params[:video] ))  %>
 
 <%= submit_tag %>
 

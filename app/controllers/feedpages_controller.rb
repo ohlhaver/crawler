@@ -25,8 +25,6 @@ class FeedpagesController < ApplicationController
    end
    
    
-   
-   
    def remove
     @feedpage = Feedpage.find(params[:id])
     @rawstories_to_be_deleted = @feedpage.rawstories.find(:all)
@@ -93,6 +91,7 @@ class FeedpagesController < ApplicationController
      @feedpage.language = params[:language]
      @feedpage.topic = params[:topic]
      @feedpage.opinionated = params[:opinionated]
+     @feedpage.video = params[:video]
      
      source_name = 'www.taz.de' if (@feedpage.url).match('www.taz.de')
      source_name = 'www.kicker.de' if (@feedpage.url).match('kicker.de')
@@ -125,9 +124,10 @@ class FeedpagesController < ApplicationController
       @feedpage.language = params[:language]
       @feedpage.topic = params[:topic]
       @feedpage.opinionated = params[:opinionated]
+      @feedpage.video = params[:video]
 
       @feedpage.save
-      redirect_to feedpages_path
+       render :action => 'new'
 
 
 

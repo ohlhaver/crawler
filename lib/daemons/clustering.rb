@@ -139,6 +139,8 @@ while($running) do
             story.haufen_id = haufen.id
             story.save
         end
+        videos = group_stories.find_all {|u| u.video == true }
+        haufen.videos = videos.size
         haufen.members = members
         haufen.save
       end
@@ -189,5 +191,5 @@ while($running) do
    build_haufens
    generate_opinions
   
-  sleep 900
+  sleep 600
 end

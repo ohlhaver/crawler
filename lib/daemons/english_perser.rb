@@ -2260,6 +2260,7 @@ while($running) do
        language = 1
        @feedpages = Feedpage.find(:all, :conditions => 'Active = 1')  
        @feedpages = @feedpages.find_all{|l| l.language == 1 }
+       @feedpages = @feedpages.find_all{|l| l.video == false }
 
 
        @feedpages.each do |page| 
@@ -2407,7 +2408,7 @@ while($running) do
 
 
 
-   en_create
+ en_create
  
   sleep 1
 end
