@@ -1449,7 +1449,7 @@ while($running) do
        author = '' if author == 'DPA'
        author = '' if author == 'REUTERS'
        author = '' if author == 'AGENCIES'
-       author = '' if author == 'TIMES NOW'
+       
        
 
           author = author.downcase
@@ -1463,22 +1463,22 @@ while($running) do
              author += word + ' '
            end  
 
-       #author = '' if author.match('Associated Press')
+       
        end
 
 
 
-     #(doc/"p.byline").remove
-     #(doc/"#cached/h1").remove
-     #(doc/"#cached/p/i").remove
+  unless author == ''
      text = (doc/"div.Normal").inner_text
-     #text = (doc/"div.entry-content").inner_text if text == ''
-     #text=text.sub('showInitialOdiogoReadNowFrame','')
-     #text=text.sub("('32285', '0', 290, 0);",'')
-
-   # intro = (doc/"#stand-first").inner_text 
-    # text = intro + '. ' + text
-
+  end
+  
+  if author == ''
+    text= ''
+    title = ''
+  end
+  
+  author = '' if author == 'Timesofindia'
+  author = '' if author == 'Times Now'
        return author, text
    end
 
@@ -1505,9 +1505,10 @@ while($running) do
        author = '' if author == 'TNN'
        author = '' if author == 'DPA'
        author = '' if author == 'REUTERS'
-       author = '' if author == 'ECONOMICTIMES'
+       
       author = '' if author == 'AGENCIES'
-      author = '' if author == 'ET BUREAU'
+      author = '' if author == 'TIMESOFINDIA'
+      
         
     
 
@@ -1523,10 +1524,11 @@ while($running) do
            end  
 
        #author = '' if author.match('Associated Press')
+
        end
 
-
-
+    unless author == ''
+      
      #(doc/"p.byline").remove
      #(doc/"#cached/h1").remove
      #(doc/"td.table").remove
@@ -1536,11 +1538,17 @@ while($running) do
      #text=text.sub('showInitialOdiogoReadNowFrame','')
      text=text.sub("doweshowbellyad = 0;",'')
      text=text.sub("ECONOMICTIMES.COM",'')
-
+    end
+    
+    if author == ''
+      title = ''
+      text = ''
+    end
    # intro = (doc/"#stand-first").inner_text 
     # text = intro + '. ' + text
-
-
+    author = ' ' if author == 'Economictimes'
+    author = ' ' if author == 'Et Bureau'
+    
        return author, text
    end
 
@@ -2210,9 +2218,6 @@ while($running) do
            author = author.gsub('3', "’")
 
            author = '' if author.match('JPOST.COM STAFF')
-           author = '' if author.match('ASSOCIATED PRESS')
-           author = '' if author.match('JPOST.COM STAFF')
-           author = '' if author.match('JPOST.COM STAFF')
 
            author = author.downcase
            author_array = author.scan(/\w+/)
@@ -2242,8 +2247,11 @@ while($running) do
 
    # intro = (doc/"#stand-first").inner_text 
     # text = intro + '. ' + text
-
-
+         if author.match('Associated Press')
+            text=''
+            title =''
+            author =''
+        end
        return author, text
    end
 
