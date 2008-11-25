@@ -17,6 +17,13 @@ while($running) do
      require 'open-uri'
      require 'iconv'  
 
+
+     if page_source_name == 'www.washingtonpost.com' 
+      doc =Hpricot(open(item_link))
+       a= read_wpost doc
+     end
+
+
           if page_source_name == 'www.ft.com' 
              f = open(item_link)
               f.rewind
@@ -203,7 +210,45 @@ while($running) do
 
        return a
    end
-   
+
+   def read_wpost doc
+
+       author = (doc/"#byline").inner_text
+
+
+       unless author == ''
+         if author.match('By')
+           author = author.sub(' and ', '+') 
+           author = author.sub(' in ', '+')
+           author = author.gsub('By ', '+')
+           author = author.gsub(',', '+')
+           author = author.gsub("’", '3')
+           author = author.gsub('-', '2')
+           author = author.gsub('.', '1')
+           author = author.gsub(' ', '0')
+
+           author = author.gsub('+', ' ')
+           author_array = author.scan(/\w+/)
+           author = author_array[0]
+           author = author.gsub('0', ' ')
+           author = author.gsub('1', '.')
+           author = author.gsub('2', '-')
+           author = author.gsub('3', "’")
+         else
+           author= ''
+         end
+       end
+
+       intro = (doc/"h2").inner_text
+       text = (doc/"#article_body/p").inner_text
+       text_2 = (doc/"#body_after_content_column/p").inner_text  
+
+       text = intro + ' ' + text + ' ' + text_2
+       text = text.sub('TOOLBOXCOMMENT', '')
+       text = text.sub("Who's Blogging", '')
+       text = text.sub('More in the Politics Section', '')
+       return author, text
+   end
 
    def read_euobserver doc
 

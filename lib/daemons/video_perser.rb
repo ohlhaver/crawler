@@ -78,6 +78,10 @@ while($running) do
               a= read_euronews doc, item
             end
 
+            if page_source_name == 'www.zeit.de' 
+              doc =Hpricot(open(item_link))
+              a= read_zeit doc, item
+            end
         
 
         return a
@@ -514,6 +518,24 @@ while($running) do
   return author, text
   end
 
+  def read_zeit doc, item
+
+    text = item.description
+      author = ''
+         text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+
+      return author, text
+  end
 
 
 
@@ -525,7 +547,7 @@ while($running) do
       require 'rubygems'
       require 'feed_tools'
       @uncrawled_stories = []  
-      language = 1
+      #language = 1
       @feedpages = Feedpage.find(:all, :conditions => 'Active = 1')  
       #@feedpages = @feedpages.find_all{|l| l.language == 1 }
       @feedpages = @feedpages.find_all{|l| l.video == true }
@@ -582,7 +604,7 @@ while($running) do
                   @story.source = page.source
                   @story.body = text
                   @story.opinion = opinionated
-                  @story.language = language
+                  @story.language = page.language
                   @story.keywords = keywords
                   @story.video = 1
                   @story.save
