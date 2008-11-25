@@ -31,6 +31,54 @@ while($running) do
          doc =Hpricot(open(item_link))
           a= read_bbc doc, item
         end
+        
+            if page_source_name == 'financialtimes.a.mms.mavenapps.net' 
+             doc =Hpricot(open(item_link))
+              a= read_ft doc, item
+            end
+
+            if page_source_name == 'audiovideo.economist.com' 
+             doc =Hpricot(open(item_link))
+              a= read_economist doc, item
+            end
+
+            if page_source_name == 'www.wsj.com' 
+             doc =Hpricot(open(item_link))
+              a= read_wsj doc, item
+            end
+
+            if page_source_name == 'link.brightcove.com' 
+             doc =Hpricot(open(item_link))
+              a= read_slatev doc, item
+            end
+
+            if page_source_name == 'feedroom.businessweek.com' 
+             doc =Hpricot(open(item_link))
+              a= read_bweek doc, item
+            end
+
+            if page_source_name == 'www.guardian.co.uk' 
+             doc =Hpricot(open(item_link))
+              a= read_guardian doc, item
+            end
+
+
+            if page_source_name == 'www.c-span.org' 
+             doc =Hpricot(open(item_link))
+              a= read_cspan doc, item
+            end
+
+            if page_source_name == 'www.youtube.com' 
+             doc =Hpricot(open(item_link))
+              a= read_youtube doc, item
+            end
+
+            if page_source_name == 'www.euronews.net' 
+              doc =Hpricot(open(item_link))
+              a= read_euronews doc, item
+            end
+
+        
 
         return a
   end
@@ -182,6 +230,293 @@ while($running) do
       return author, text
   end
 
+  def read_ft doc, item
+
+   # text = item.description
+   text = item.description
+     author = ''
+        unless text == nil
+
+           text = text.sub('<p>', '+') 
+
+            text = text.gsub(' ', 'LUECKE1')
+            text = text.gsub(',', 'LUECKE2')
+            text = text.gsub('.', 'LUECKE3')
+            text = text.gsub("'", 'LUECKE5')
+            text = text.gsub('"', 'LUECKE6')
+            text = text.gsub('=', 'LUECKE7')
+            text = text.gsub("/", 'LUECKE8')
+            text = text.gsub('_', 'LUECKE9')
+            text = text.gsub(':', 'LUECKE10')
+            text = text.gsub('-', 'LUECKE11')
+            text = text.gsub('?', 'LUECKE12')
+            text = text.gsub('(', 'LUECKE')
+            text = text.gsub(')', 'LUECKE')
+            text = text.gsub('&', 'LUECKE')
+            text = text.gsub(';', 'LUECKE')
+
+            text = text.gsub('+', ' ')
+            text_array = text.scan(/\w+/)
+            text = text_array[1]
+            text = text.gsub('LUECKE1', ' ')
+            text = text.gsub('LUECKE2', ',')
+            text = text.gsub('LUECKE3', '.')
+
+            text = text.gsub('LUECKE5', "'")
+            text = text.gsub('LUECKE6', '"')
+            text = text.gsub( 'LUECKE7','=')
+            text = text.gsub( 'LUECKE8', "/")
+            text = text.gsub( 'LUECKE9', '_')
+            text = text.gsub( 'LUECKE10', ':')
+            text = text.gsub( 'LUECKE11', '-')
+            text = text.gsub( 'LUECKE12', '?')
+            text = text.gsub( 'LUECKE', ' ')
+            #text = text.gsub('LUECKE7', '-')
+
+          text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+        end
+
+
+      return author, text
+  end
+
+  def read_economist doc, item
+
+    text = item.description
+      author = ''
+         text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+
+      return author, text
+  end
+
+  def read_wsj doc, item
+
+
+    #text = item.description
+     text = (doc/"#video_headline.embedContainer").inner_text
+
+      author = ''
+         text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+      return author, text
+  end
+
+  def read_slatev doc, item
+
+    text = item.description
+    unless text == nil
+
+       text = text.sub('/>', '+') 
+
+        text = text.gsub(' ', 'LUECKE1')
+        text = text.gsub(',', 'LUECKE2')
+        text = text.gsub('.', 'LUECKE3')
+        text = text.gsub("'", 'LUECKE5')
+        text = text.gsub('"', 'LUECKE6')
+        text = text.gsub('=', 'LUECKE7')
+        text = text.gsub("/", 'LUECKE8')
+        text = text.gsub('_', 'LUECKE9')
+        text = text.gsub(':', 'LUECKE10')
+        text = text.gsub('-', 'LUECKE11')
+        text = text.gsub('?', 'LUECKE12')
+
+        text = text.gsub('+', ' ')
+        text_array = text.scan(/\w+/)
+        text = text_array[1]
+        text = text.gsub('LUECKE1', ' ')
+        text = text.gsub('LUECKE2', ',')
+        text = text.gsub('LUECKE3', '.')
+
+        text = text.gsub('LUECKE5', "'")
+        text = text.gsub('LUECKE6', '"')
+        text = text.gsub( 'LUECKE7','=')
+        text = text.gsub( 'LUECKE8', "/")
+        text = text.gsub( 'LUECKE9', '_')
+        text = text.gsub( 'LUECKE10', ':')
+        text = text.gsub( 'LUECKE11', '-')
+        text = text.gsub( 'LUECKE12', '?')
+        #text = text.gsub('LUECKE7', '-')
+
+      text = text.downcase
+      text_array = text.scan(/\w+/)
+      text = ''
+     text_array.each do |word|
+        word_a = word.first.upcase
+        word_b = word.sub(word.first, '')
+
+        word = word_a + word_b  
+        text += word + ' '
+      end
+
+
+      author = ''
+      end  
+
+      return author, text
+  end
+
+  def read_bweek doc, item
+
+    text = item.description
+      author = ''
+         text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+
+      return author, text
+  end
+
+  def read_guardian doc, item
+
+
+    #text = item.description
+     text = (doc/"#stand-first").inner_text
+
+      author = (doc/"li.credit/a[1]").inner_text
+       author = (doc/"li.credit").inner_text if author == ''
+         text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+      return author, text
+  end
+
+  def read_cspan doc, item
+
+    text = item.description
+      author = ''
+         unless text == nil
+
+            text = text.sub(' br ', '+') 
+
+             text = text.gsub(' ', 'LUECKE1')
+             text = text.gsub(',', 'LUECKE2')
+             text = text.gsub('.', 'LUECKE3')
+             text = text.gsub("'", 'LUECKE5')
+             text = text.gsub('"', 'LUECKE6')
+             text = text.gsub('=', 'LUECKE7')
+             text = text.gsub("/", 'LUECKE8')
+             text = text.gsub('_', 'LUECKE9')
+             text = text.gsub(':', 'LUECKE10')
+             text = text.gsub('-', 'LUECKE11')
+             text = text.gsub('?', 'LUECKE12')
+             text = text.gsub('(', 'LUECKE')
+             text = text.gsub(')', 'LUECKE')
+             text = text.gsub('&', 'LUECKE')
+             text = text.gsub(';', 'LUECKE')
+
+             text = text.gsub('+', ' ')
+             text_array = text.scan(/\w+/)
+             text = text_array[0]
+             text = text.gsub('LUECKE1', ' ')
+             text = text.gsub('LUECKE2', ',')
+             text = text.gsub('LUECKE3', '.')
+
+             text = text.gsub('LUECKE5', "'")
+             text = text.gsub('LUECKE6', '"')
+             text = text.gsub( 'LUECKE7','=')
+             text = text.gsub( 'LUECKE8', "/")
+             text = text.gsub( 'LUECKE9', '_')
+             text = text.gsub( 'LUECKE10', ':')
+             text = text.gsub( 'LUECKE11', '-')
+             text = text.gsub( 'LUECKE12', '?')
+             text = text.gsub( 'LUECKE', ' ')
+             #text = text.gsub('LUECKE7', '-')
+
+           text = text.downcase
+           text_array = text.scan(/\w+/)
+           text = ''
+          text_array.each do |word|
+             word_a = word.first.upcase
+             word_b = word.sub(word.first, '')
+
+             word = word_a + word_b  
+             text += word + ' '
+           end
+
+         end
+
+
+
+      return author, text
+  end
+
+  def read_youtube doc, item
+
+
+    #text = item.description
+     text = (doc/"div.watch-video-desc").inner_text
+
+      #author = (doc/"li.credit/a[1]").inner_text
+      # author = (doc/"li.credit").inner_text if author == ''
+         text = text.downcase
+          text_array = text.scan(/\w+/)
+          text = ''
+         text_array.each do |word|
+            word_a = word.first.upcase
+            word_b = word.sub(word.first, '')
+
+            word = word_a + word_b  
+            text += word + ' '
+          end
+
+     author = ''
+      return author, text
+  end
+
+  def read_euronews doc, item
+  text = (doc/"#article-text/p").inner_text
+  author = ''
+  return author, text
+  end
+
+
+
+
 
   def video_create
     Eintrag.create(:name => 'Video crawling started') 
@@ -192,7 +527,7 @@ while($running) do
       @uncrawled_stories = []  
       language = 1
       @feedpages = Feedpage.find(:all, :conditions => 'Active = 1')  
-      @feedpages = @feedpages.find_all{|l| l.language == 1 }
+      #@feedpages = @feedpages.find_all{|l| l.language == 1 }
       @feedpages = @feedpages.find_all{|l| l.video == true }
 
 
