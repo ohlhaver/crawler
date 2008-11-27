@@ -45,14 +45,14 @@ while($running) do
                       #c.position = c.keywords.scan(/\w+/)
 
                                 c.score = calculate_score c 
-                                if c.score > 5 && c.related != 1 && c.language == 1
+                                if c.score > 4 && c.related != 1 && c.language == 1
                                       c.group_id = group.id
                                       c.related = 1 if @save == 1
                                       c.save 
                                       group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
                                       source_array << c.source.id unless source_array.include?(c.source.id)                                                                                   
                                 end  
-                                if c.score > 4 && c.related != 1 && c.language == 2
+                                if c.score > 3 && c.related != 1 && c.language == 2
                                           c.group_id = group.id
                                           c.related = 1 if @save == 1
                                           c.save 
@@ -191,5 +191,5 @@ while($running) do
    build_haufens
    generate_opinions
   
-  sleep 600
+  sleep 300
 end
