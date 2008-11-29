@@ -239,58 +239,92 @@ while($running) do
          end
        end
 
-       intro = (doc/"h2").inner_text
+       intro = (doc/"#article/div/h2").inner_text
+
        text = (doc/"#article_body/p").inner_text
        text_2 = (doc/"#body_after_content_column/p").inner_text  
 
        text = intro + ' ' + text + ' ' + text_2
-       text = text.sub('TOOLBOXCOMMENT', '')
-       text = text.sub("Who's Blogging", '')
-       text = text.sub('More in the Politics Section', '')
+
+       text = text.sub('Jan.', '')
+       text = text.sub("Feb.", '')
+       text = text.sub('Mar.', '')
+       text = text.sub('Apr.', '')
+       text = text.sub("May.", '')
+       text = text.sub('Jun.', '')
+       text = text.sub('Jul.', '')
+       text = text.sub("Aug.", '')
+       text = text.sub('Sep.', '')
+       text = text.sub('Oct.', '')
+       text = text.sub("Nov.", '')
+       text = text.sub('Dec.', '')
+       text = text.sub('JAN', '')
+       text = text.sub("FEB", '')
+       text = text.sub('MAR', '')
+       text = text.sub('APR', '')
+       text = text.sub("MAY", '')
+       text = text.sub('JUN', '')
+       text = text.sub('JUL', '')
+       text = text.sub("AUG", '')
+       text = text.sub('SEP', '')
+       text = text.sub('OCT', '')
+       text = text.sub("NOV", '')
+       text = text.sub('DEC', '')
+
+
+
+
+
+
+
        return author, text
    end
 
+  
    def read_euobserver doc
 
        author = (doc/"p.author/a").inner_text
        author = (doc/"p.author").inner_text if author == ''
 
-
-      unless author == ''
-          author = author.sub('and ', '+') 
-          author = author.gsub('and', '+')
-          author = author.gsub('By ', '+')
-          author = author.gsub(',', '+')
-          author = author.gsub("’", '3')
-          author = author.gsub('-', '2')
-          author = author.gsub('.', '1')
-          author = author.gsub(' ', '0')
-
-          author = author.gsub('+', ' ')
-          author_array = author.scan(/\w+/)
-          author = author_array[0]
-          author = author.gsub('0', ' ')
-          author = author.gsub('1', '.')
-          author = author.gsub('2', '-')
-          author = author.gsub('3', "’")
-
-
-          author = author.downcase
-          author_array = author.scan(/\w+/)
-          author = ''
-         author_array.each do |word|
-            word_a = word.first.upcase
-            word_b = word.sub(word.first, '')
-
-            word = word_a + word_b  
-            author += word + ' '
-          end
-
-      end
-
        text = (doc/"div.content/p").inner_text
-       #text = (doc/"#mainContent/ul").inner_text if text == ''
        text= text.gsub('Permalink','')
+       text= text.sub(author, '')
+       text= text.sub('CETEUOBSERVER', '')
+       text= text.sub('BRUSSELS', '')
+       text= text.sub('Today', '')  
+       text= text.sub('COMMENT', '') 
+
+       unless author == ''
+           author = author.sub(' and ', '+') 
+           author = author.gsub(' AND ', '+')
+           author = author.gsub('By ', '+')
+           author = author.gsub(',', '+')
+           author = author.gsub("’", '3')
+           author = author.gsub('-', '2')
+           author = author.gsub('.', '1')
+           author = author.gsub(' ', '0')
+
+           author = author.gsub('+', ' ')
+           author_array = author.scan(/\w+/)
+           author = author_array[0]
+           author = author.gsub('0', ' ')
+           author = author.gsub('1', '.')
+           author = author.gsub('2', '-')
+           author = author.gsub('3', "’")
+
+
+           author = author.downcase
+           author_array = author.scan(/\w+/)
+           author = ''
+          author_array.each do |word|
+             word_a = word.first.upcase
+             word_b = word.sub(word.first, '')
+
+             word = word_a + word_b  
+             author += word + ' '
+           end
+
+       end
 
        return author, text
    end
