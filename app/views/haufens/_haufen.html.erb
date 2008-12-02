@@ -5,7 +5,7 @@ Broadness:  <%= haufen.broadness %>
 
 Pilot: <%= haufen.pilot %>
 Topic: <%= haufen.topic %>
-
+Top-headline. <%= render :partial => Rawstory.find(haufen.latest) %>
 <% @haufen_stories =[] %>
 <% member_array = haufen.members.split(/\ /) %>
 <% member_array.each do |member| %>
