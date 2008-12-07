@@ -89,8 +89,7 @@ class GroupsController < ApplicationController
         
         if  @save == 1
          record_score = 0
-         group_topic = 1
-
+         group_topic = nil
         if politics_score > 0
           group_topic = 2
           record_score = politics_score
@@ -125,7 +124,7 @@ class GroupsController < ApplicationController
           group_topic = 7
           record_score = mixed_score
         end
-        group.topic = group_topic
+        group.topic = group_topic if group_topic
         end
         @related_stories = @current_stories.find_all{|v| v.group_id == group.id } 
         group.weight = @related_stories.size
