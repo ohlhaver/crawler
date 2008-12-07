@@ -25,6 +25,13 @@ class GroupsController < ApplicationController
       end  
 
       def make_group
+        politics_score = 0
+        business_score = 0
+        culture_score = 0
+        science_score = 0
+        tech_score = 0
+        sport_score = 0
+        mixed_score = 0
         source_array=[]
         @current_stories = @current_stories.find_all{|r| r.related != 1 }
         group = Group.create
@@ -43,21 +50,83 @@ class GroupsController < ApplicationController
                                         c.group_id = group.id
                                         c.related = 1 if @save == 1
                                         c.save 
-                                        group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
+                                        if @save == 1
+                                          topic = c.feedpage.topic
+
+                                          politics_score +=1 if topic == 2
+                                          business_score +=1 if topic == 5
+                                          culture_score +=1 if topic == 3
+                                          science_score +=1 if topic == 4
+                                          tech_score  +=1 if topic == 9
+                                          sport_score  +=1 if topic == 6
+                                          mixed_score  +=1 if topic == 7
+                                        end
+                                       # group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
                                         source_array << c.source.id unless source_array.include?(c.source.id)                                                                                   
                                   end  
                                   if c.score > 3 && c.related != 1 && c.language == 2
                                             c.group_id = group.id
                                             c.related = 1 if @save == 1
                                             c.save 
-                                            group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
+                                            if @save == 1
+                                              topic = c.feedpage.topic
+
+                                              politics_score +=1 if topic == 2
+                                              business_score +=1 if topic == 5
+                                              culture_score +=1 if topic == 3
+                                              science_score +=1 if topic == 4
+                                              tech_score  +=1 if topic == 9
+                                              sport_score  +=1 if topic == 6
+                                              mixed_score  +=1 if topic == 7
+                                            end
+                                        #    group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
                                             source_array << c.source.id unless source_array.include?(c.source.id)                                                                                   
                                   end
 
                 end
               end
         end
+        
+        if  @save == 1
+         record_score = 0
+         group_topic = 1
 
+        if politics_score > 0
+          group_topic = 2
+          record_score = politics_score
+        end
+
+        if business_score > record_score
+          group_topic = 5
+          record_score = business_score
+        end
+
+        if culture_score > record_score
+          group_topic = 3
+          record_score = culture_score
+        end
+
+        if science_score > record_score
+          group_topic = 4
+          record_score = science_score
+        end
+
+        if tech_score > record_score
+          group_topic = 9
+          record_score = tech_score
+        end
+
+        if sport_score > record_score
+          group_topic = 6
+          record_score = sport_score
+        end
+
+        if mixed_score > record_score
+          group_topic = 7
+          record_score = mixed_score
+        end
+        group.topic = group_topic
+        end
         @related_stories = @current_stories.find_all{|v| v.group_id == group.id } 
         group.weight = @related_stories.size
         group.broadness = source_array.size 
@@ -69,7 +138,8 @@ class GroupsController < ApplicationController
         end
 
       end
-
+      
+      
       def build_groups
           Eintrag.create(:name => 'Group building 1 started')   
           starting_time = Time.new

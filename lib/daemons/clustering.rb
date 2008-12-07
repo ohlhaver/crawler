@@ -40,51 +40,120 @@ while($running) do
      end  
 
      def make_group
-       source_array=[]
-       @current_stories = @current_stories.find_all{|r| r.related != 1 }
-       group = Group.create
-       group.gsession_id = @gsession.id
-       group.topic = @pilot_story.feedpage.topic
-       group.pilot = @pilot_story.id
-       group.language =  @pilot_story.language
-       #@pilot_story.position = @pilot_story.keywords.scan(/\w+/)
-       @current_stories.each do |c|
-             if c.language ==  group.language
-               if c.title != nil 
-                       #c.position = c.keywords.scan(/\w+/)
+        politics_score = 0
+        business_score = 0
+        culture_score = 0
+        science_score = 0
+        tech_score = 0
+        sport_score = 0
+        mixed_score = 0
+        source_array=[]
+        @current_stories = @current_stories.find_all{|r| r.related != 1 }
+        group = Group.create
+        group.gsession_id = @gsession.id
+        group.topic = @pilot_story.feedpage.topic
+        group.pilot = @pilot_story.id
+        group.language =  @pilot_story.language
+        #@pilot_story.position = @pilot_story.keywords.scan(/\w+/)
+        @current_stories.each do |c|
+              if c.language ==  group.language
+                if c.title != nil 
+                        #c.position = c.keywords.scan(/\w+/)
 
-                                 c.score, c.hscore = calculate_score c 
-                                 if c.score > 4 && c.related != 1 && c.language == 1
-                                       c.group_id = group.id
-                                       c.related = 1 if @save == 1
-                                       c.save 
-                                       group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
-                                       source_array << c.source.id unless source_array.include?(c.source.id)                                                                                   
-                                 end  
-                                 if c.score > 3 && c.related != 1 && c.language == 2
-                                           c.group_id = group.id
-                                           c.related = 1 if @save == 1
-                                           c.save 
-                                           group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
-                                           source_array << c.source.id unless source_array.include?(c.source.id)                                                                                   
-                                 end
+                                  c.score, c.hscore = calculate_score c 
+                                  if c.score > 4 && c.related != 1 && c.language == 1
+                                        c.group_id = group.id
+                                        c.related = 1 if @save == 1
+                                        c.save 
+                                        if @save == 1
+                                          topic = c.feedpage.topic
 
-               end
-             end
-       end
+                                          politics_score +=1 if topic == 2
+                                          business_score +=1 if topic == 5
+                                          culture_score +=1 if topic == 3
+                                          science_score +=1 if topic == 4
+                                          tech_score  +=1 if topic == 9
+                                          sport_score  +=1 if topic == 6
+                                          mixed_score  +=1 if topic == 7
+                                        end
+                                       # group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
+                                        source_array << c.source.id unless source_array.include?(c.source.id)                                                                                   
+                                  end  
+                                  if c.score > 3 && c.related != 1 && c.language == 2
+                                            c.group_id = group.id
+                                            c.related = 1 if @save == 1
+                                            c.save 
+                                            if @save == 1
+                                              topic = c.feedpage.topic
 
-       @related_stories = @current_stories.find_all{|v| v.group_id == group.id } 
-       group.weight = @related_stories.size
-       group.broadness = source_array.size 
-       group.save
-       if @save == 1 && group.broadness > 1
-         @pilot_story.group_id = group.id 
-         @pilot_story.related = 1
-         @pilot_story.save
-       end
+                                              politics_score +=1 if topic == 2
+                                              business_score +=1 if topic == 5
+                                              culture_score +=1 if topic == 3
+                                              science_score +=1 if topic == 4
+                                              tech_score  +=1 if topic == 9
+                                              sport_score  +=1 if topic == 6
+                                              mixed_score  +=1 if topic == 7
+                                            end
+                                        #    group.topic = c.feedpage.topic if @save == 1 && group.topic == 1 && c.feedpage.topic != 1   
+                                            source_array << c.source.id unless source_array.include?(c.source.id)                                                                                   
+                                  end
+
+                end
+              end
+        end
+        
+        if  @save == 1
+         record_score = 0
+         group_topic = 1
+
+        if politics_score > 0
+          group_topic = 2
+          record_score = politics_score
+        end
+
+        if business_score > record_score
+          group_topic = 5
+          record_score = business_score
+        end
+
+        if culture_score > record_score
+          group_topic = 3
+          record_score = culture_score
+        end
+
+        if science_score > record_score
+          group_topic = 4
+          record_score = science_score
+        end
+
+        if tech_score > record_score
+          group_topic = 9
+          record_score = tech_score
+        end
+
+        if sport_score > record_score
+          group_topic = 6
+          record_score = sport_score
+        end
+
+        if mixed_score > record_score
+          group_topic = 7
+          record_score = mixed_score
+        end
+        group.topic = group_topic
+        end
+        @related_stories = @current_stories.find_all{|v| v.group_id == group.id } 
+        group.weight = @related_stories.size
+        group.broadness = source_array.size 
+        group.save
+        if @save == 1 && group.broadness > 1
+          @pilot_story.group_id = group.id 
+          @pilot_story.related = 1
+          @pilot_story.save
+        end
 
      end
-
+  
      def build_groups
          Eintrag.create(:name => 'Group building 1 started')   
          starting_time = Time.new
