@@ -206,7 +206,7 @@ while($running) do
          haufen.topic = group.topic
          haufen.pilot = group.pilot
          haufen.language = group.language
-         haufen.weight = group.weight
+         #haufen.weight = group.weight
          haufen.broadness = (group.broadness * 10) + group.weight
          ok_stories = group.rawstories.find_all {|u| u.hscore > 1 }
          if ok_stories.size != 0
@@ -215,6 +215,7 @@ while($running) do
            haufen.latest = group.rawstories.last.id
          end
          group_stories = group.rawstories
+         haufen.weight = group_stories.size
          members = ''
          group_stories.each do |story|
              members += story.id.to_s + ' '  
