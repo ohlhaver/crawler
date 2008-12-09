@@ -289,9 +289,31 @@ while($running) do
   end
 
   def read_spiegel doc
-                      
-         intro = (doc/"p.spIntrotext/strong").inner_html
+    
+        title = (doc/"#spMainContent/h2").inner_html  
 
+        roof = (doc/"#spMainContent/h1").inner_html
+        roof = '' if roof == nil
+        #if roof != nil
+        #roof = roof.downcase
+        #roof = roof.gsub('Ä','ä')
+        #roof = roof.gsub('Ö','ö')
+        #roof = roof.gsub('Ü','ü')
+        #roof_array = roof.scan(/\w+/)
+        #roof = ''
+        #roof_array.each do |word|
+        #   word_a = word.first.upcase
+        #   word_b = word.sub(word.first, '')
+
+        #   word = word_a + word_b  
+        #   roof += ' ' + word
+           
+        # end  
+        # roof = roof.sub(' ', '')   
+      #  end
+      #   title = roof +': ' + title if roof != ''
+                            
+         intro = (doc/"p.spIntrotext/strong").inner_html
          author = (doc/"p.spAutorenzeile/a[1]").inner_html
          if author == ''
          author = (doc/"p.spAutorenzeile").inner_html 
@@ -303,6 +325,7 @@ while($running) do
           author = author.gsub('By ', '+')
           author = author.gsub(',', '+')       
           author = author.gsub('Von ', '+')
+          author = author.gsub('von ', '+')
           
           author = author.gsub(',', '+')
          author = author.gsub('ß', 'ss')
@@ -330,7 +353,6 @@ while($running) do
 
          doc = (doc/"#spArticleBody/p")
          
-
          (doc/"div.spAsset").remove
          (doc/"div.spArticleImageBox").remove
          (doc/"div.spPhotoGallery").remove
@@ -338,12 +360,10 @@ while($running) do
          (doc/"div.spTagbox").remove
          (doc/"div.spCommentBox").remove
 
-
-
          text = doc.inner_text
-         text = intro + ' ' + text
+         text = intro + ' ' + text + ' ' + roof
 
-         return author, text
+         return author, text, title
   end
 
 
@@ -780,9 +800,9 @@ while($running) do
   end
 
   def read_rundschau doc
-        roof_title = (doc/"span.dz").inner_text
-        title = (doc/"h2.hz").inner_text
-        title = roof_title + ': ' + title if roof_title != ''
+        #roof_title = (doc/"span.dz").inner_text
+        #title = (doc/"h2.hz").inner_text
+        #title = roof_title + ': ' + title if roof_title != ''
         author = (doc/"div.az").inner_text
         unless author == nil
           author = author.gsub('VON', '+')
@@ -817,12 +837,12 @@ while($running) do
         end
              doc = (doc/"div.text")
         text = doc.inner_text
-        if title.match('Seite nicht gefunden')
-            text = ''
-            title = ''
-            author = ''
-        end
-        return author, text, title
+        #if title.match('Seite nicht gefunden')
+        #    text = ''
+        #    title = ''
+        #    author = ''
+        #end
+        return author, text
   end
    
   def read_11freunde doc
