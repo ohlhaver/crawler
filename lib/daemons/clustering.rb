@@ -208,7 +208,7 @@ while($running) do
          haufen.language = group.language
          #haufen.weight = group.weight
          haufen.broadness = (group.broadness * 10) + group.weight
-         ok_stories = group.rawstories.find_all {|u| u.hscore > 1 }
+         ok_stories = group.rawstories.find_all {|u| u.hscore > 0 }
          if ok_stories.size != 0
            haufen.latest = ok_stories.last.id
            else
