@@ -248,14 +248,16 @@ while($running) do
          @de_opinions = @de_opinions.sort_by {|u| - u.author.subscriptions.size}
          @de_opinions = @de_opinions.first(24)
 
-
+         @all_opinions = @stories.find_all{|v| v.opinion == 1 }
+         @all_opinions = @all_opinions.find_all{|v| v.author.name != '' }
+         @all_opinions = @all_opinions.sort_by {|u| - u.author.subscriptions.size}
+         @all_opinions = @all_opinions.first(24)
+       
        opinions_en = ''
 
            @en_opinions.each do |opinion|
                opinions_en += opinion.id.to_s + ' '
            end
-
-
 
        opinions_de = ''
 
@@ -263,10 +265,16 @@ while($running) do
                opinions_de += opinion.id.to_s + ' '
            end
 
+      opinions_all = ''
+
+           @all_opinions.each do |opinion|
+               opinions_all += opinion.id.to_s + ' '
+           end
 
        new_list = Olist.create      
        new_list.en = opinions_en
-       new_list.de = opinions_de    
+       new_list.de = opinions_de
+       new_list.all = opinions_all     
        new_list.save
      end
     

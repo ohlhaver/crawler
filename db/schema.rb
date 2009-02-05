@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081202121239) do
+ActiveRecord::Schema.define(:version => 20090205155801) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20081202121239) do
     t.text     "de"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "all"
   end
 
   create_table "rawstories", :force => true do |t|
@@ -103,6 +104,7 @@ ActiveRecord::Schema.define(:version => 20081202121239) do
     t.integer  "linkhash",    :limit => 11
     t.boolean  "video"
     t.integer  "hscore",      :limit => 11
+    t.integer  "nhaufen",     :limit => 11
   end
 
   add_index "rawstories", ["title"], :name => "index_rawstories_on_title", :unique => true
@@ -136,6 +138,9 @@ ActiveRecord::Schema.define(:version => 20081202121239) do
     t.text     "stories"
     t.text     "new_stories"
     t.boolean  "alerts"
+    t.string   "searchterms"
+    t.boolean  "full"
+    t.integer  "language",                  :limit => 11
   end
 
 end
