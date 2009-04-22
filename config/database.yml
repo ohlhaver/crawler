@@ -21,7 +21,7 @@ test:
 production:
     adapter: mysql
     encoding: utf8
-    database: crawler_prod
+    database: index_crawler_prod
     username: crawler_prod
     password: sokratisrosenwel
     socket: /var/lib/mysql/mysql.sock
