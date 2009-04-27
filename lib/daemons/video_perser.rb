@@ -1,21 +1,21 @@
 #!/usr/bin/env ruby
 
 #You might want to change this
-#ENV["RAILS_ENV"] ||= "production"
+ENV["RAILS_ENV"] ||= "production"
 
 require File.dirname(__FILE__) + "/../../config/environment"
+require 'feed_tools'
+require 'hpricot'
+require 'open-uri'
+require 'iconv'
 
 $running = true;
 Signal.trap("TERM") do 
   $running = false
 end
 
-while($running) do
   
   def read_page page_source_name, item, item_link
-    require 'hpricot'
-    require 'open-uri'
-    require 'iconv'
 
         if page_source_name == 'www.cnn.com' 
          doc = ''
@@ -544,18 +544,22 @@ while($running) do
     Eintrag.create(:name => 'Video crawling started') 
     starting_time = Time.new
 
-      require 'rubygems'
-      require 'feed_tools'
       @uncrawled_stories = []  
       #language = 1
       @feedpages = Feedpage.find(:all, :conditions => 'Active = 1')  
       #@feedpages = @feedpages.find_all{|l| l.language == 1 }
       @feedpages = @feedpages.find_all{|l| l.video == true }
+      feedpage_ids       = @feedpages.collect{|f| f.id}.uniq*","
+      unless feedpage_ids.blank?
+        stories            = Rawstory.find(:all,
+                                           :conditions => ["feedpage_id IN ( #{feedpage_ids})"],
+                                           :select     => 'id, feedpage_id')
+        stories_hashed     = stories.group_by{|s| s.feedpage_id} 
+      end
 
 
       @feedpages.each do |page| 
-         stories_to_check = page.rawstories #.find_all{|r| r.created_at > (Time.now - 1000000)}
-          page.previous_size = page.rawstories.size
+          page.previous_size = stories_hashed[page.id].size
           page.save
           feed = FeedTools::Feed.open(page.url)
 
@@ -701,6 +705,8 @@ while($running) do
             return keywords
 
   end
-video_create
-sleep 300
+
+while($running) do
+  video_create
+  sleep 300
 end
