@@ -293,5 +293,5 @@ while($running) do
    build_haufens
    generate_opinions
   
-  sleep 300
+  sleep 10
 end
