@@ -157,6 +157,7 @@ while($running) do
          Eintrag.create(:name => 'Group building 1 started')   
          starting_time = Time.new
          @gsession = Gsession.create
+         last_gsession_id = @gsession.id
          @current_stories = Rawstory.find(:all, :conditions => ['created_at > :date', {:date => Time.now.yesterday}], :order => 'id DESC') 
          @current_stories = @current_stories.find_all{|r| r.keywords != nil }       
          @save = 0  
@@ -184,6 +185,7 @@ while($running) do
                 @pilot_story = Rawstory.find(g.pilot)
                  make_group
          end  
+         Group.delete_all(" gsession_id < #{last_gsession_id}")
          finishing_time = Time.new
          duration = (finishing_time - starting_time)
          Eintrag.create(:name => 'Group building 2 completed', :duration => duration)
@@ -198,6 +200,15 @@ while($running) do
        @groups = Gsession.find(:last).groups  
        @groups = @groups.find_all {|u| u.broadness > 1 }
        @groups = @groups.sort_by {|u| - u.broadness } 
+       
+       group_ids = @groups.collect{|g| g.id}.uniq*","
+       unless group_ids.blank?
+         stories            = Rawstory.find(:all,
+                                            :conditions => ["group_id IN ( #{feedpage_ids})"],
+                                            :order      => "id DESC",
+                                            :select     => 'id, group_id')
+         stories_hashed     = stories.group_by{|s| s.group_id} 
+       end
 
 
        @groups.each do |group|
@@ -208,13 +219,13 @@ while($running) do
          haufen.language = group.language
          #haufen.weight = group.weight
          haufen.broadness = (group.broadness * 10) + group.weight
-         ok_stories = group.rawstories.find_all {|u| u.hscore > 0 }
+         ok_stories = stories_hashed[group.id].find_all {|u| u.hscore > 0 }
          if ok_stories.size != 0
-           haufen.latest = ok_stories.last.id
+           haufen.latest = ok_stories.first.id
            else
-           haufen.latest = group.rawstories.last.id
+           haufen.latest = stories_hashed[group.id].first.id
          end
-         group_stories = group.rawstories
+         group_stories = stories_hashed[group.id]
          haufen.weight = group_stories.size
          members = ''
          group_stories.each do |story|
