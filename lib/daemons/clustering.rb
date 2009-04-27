@@ -204,7 +204,7 @@ while($running) do
        group_ids = @groups.collect{|g| g.id}.uniq*","
        unless group_ids.blank?
          stories            = Rawstory.find(:all,
-                                            :conditions => ["group_id IN ( #{feedpage_ids})"],
+                                            :conditions => ["group_id IN ( #{group_ids})"],
                                             :order      => "id DESC",
                                             :select     => 'id, group_id')
          stories_hashed     = stories.group_by{|s| s.group_id} 
@@ -289,7 +289,7 @@ while($running) do
        new_list.save
      end
     
- build_groups
+   build_groups
    build_haufens
    generate_opinions
   
