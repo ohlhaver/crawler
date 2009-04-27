@@ -206,7 +206,7 @@ while($running) do
          stories            = Rawstory.find(:all,
                                             :conditions => ["group_id IN ( #{group_ids})"],
                                             :order      => "id DESC",
-                                            :select     => 'id, group_id, hscore')
+                                            :select     => 'id, group_id, hscore, video')
          stories_hashed     = stories.group_by{|s| s.group_id} 
        end
 
