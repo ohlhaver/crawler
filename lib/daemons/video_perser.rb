@@ -4,11 +4,13 @@
 #ENV["RAILS_ENV"] ||= "production"
 
 require File.dirname(__FILE__) + "/../../config/environment"
+require 'rubygems'
 require 'feed_tools'
 require 'hpricot'
 require 'open-uri'
 require 'iconv'
-require 'rubygems'
+
+
 
 $running = true;
 Signal.trap("TERM") do 
