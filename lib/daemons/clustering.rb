@@ -206,7 +206,7 @@ while($running) do
          stories            = Rawstory.find(:all,
                                             :conditions => ["group_id IN ( #{group_ids})"],
                                             :order      => "id DESC",
-                                            :select     => 'id, group_id')
+                                            :select     => 'id, group_id, hscore')
          stories_hashed     = stories.group_by{|s| s.group_id} 
        end
 
@@ -230,9 +230,9 @@ while($running) do
          members = ''
          group_stories.each do |story|
              members += story.id.to_s + ' '  
-             story.haufen_id = haufen.id
-             story.save
          end
+         group_story_ids = group_stories.collect{|s| s.id}.uniq*","
+         Rawstory.update_all("haufen_id = #{haufen.id}", " id IN (#{group_story_ids})") unless group_story_ids.blank?
          videos = group_stories.find_all {|u| u.video == true }
          haufen.videos = videos.size
          haufen.members = members
