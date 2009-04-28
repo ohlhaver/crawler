@@ -7,11 +7,12 @@ require File.dirname(__FILE__) + "/../../config/environment"
 require 'rubygems'  
 require 'feed_tools'
 require 'hpricot'
-require 'open-uri'
+require 'rubygems/open-uri'
 require 'iconv'
 
 
 $running = true;
+$timeout_in_seconds = 4
 Signal.trap("TERM") do 
   $running = false
 end
@@ -21,191 +22,191 @@ end
 
 
      if page_source_name == 'www.washingtonpost.com' 
-      doc =Hpricot(open(item_link))
+      doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
        a= read_wpost doc
      end
 
 
           if page_source_name == 'www.ft.com' 
-             f = open(item_link)
+             f = open(item_link, :read_timeout => $timeout_in_seconds)
               f.rewind
               doc = Hpricot(Iconv.conv('utf-8', f.charset, f.readlines.join("\n")))
              a= read_ft doc
           end
 
           if page_source_name == 'euobserver.com' 
-            doc =Hpricot(open(item_link))
+            doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
              a= read_euobserver doc
            end
            
           if page_source_name == 'www.huffingtonpost.com' 
-           doc =Hpricot(open(item_link))
+           doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
             a= read_huffington doc
           end
 
           if page_source_name == 'www.politico.com' 
-           doc =Hpricot(open(item_link))
+           doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
             a= read_politico doc
           end
 
              if page_source_name == 'www.nytimes.com' 
-              doc =Hpricot(open(item_link))
+              doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                a= read_nytimes doc
              end
 
             if page_source_name == 'www.economist.com' 
-               doc =Hpricot(open(item_link))
+               doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                 a= read_economist doc
             end
 
               if page_source_name == 'www.latimes.com' 
-                doc =Hpricot(open(item_link))
+                doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                  a= read_latimes doc
               end
 
                if page_source_name == 'online.wsj.com' 
-                 doc =Hpricot(open(item_link))
+                 doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                   a= read_wsj doc
                end
 
 
                 if page_source_name == 'www.chicagotribune.com' 
-                  doc =Hpricot(open(item_link))
+                  doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                    a= read_ctribune doc
                 end
 
                  if page_source_name == 'www.slate.com' 
-                   doc =Hpricot(open(item_link))
+                   doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                     a= read_slate doc
                  end
 
             if page_source_name == 'www.salon.com' 
-                      doc =Hpricot(open(item_link))
+                      doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                        a= read_salon doc
             end
 
                  if page_source_name == 'www.newsweek.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_newsweek doc
                  end
 
                  if page_source_name == 'www.time.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_time doc
                  end
 
                  if page_source_name == 'www.nationalreview.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_nreview doc
                  end
 
                  if page_source_name == 'www.tnr.com' 
                    #does not work yet!
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_tnr doc
                  end
 
                  if page_source_name == 'www.newyorker.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_newyorker doc
                  end
 
                  if page_source_name == 'harpers.org' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_harpers doc
                  end
 
                  if page_source_name == 'www.businessweek.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_businessweek doc
                  end
 
                  if page_source_name == 'www.redherring.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_redherring doc
                  end
 
                  if page_source_name == 'www.guardian.co.uk' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_guardian doc
                  end
 
                  if page_source_name == 'www.independent.co.uk' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_independent doc
                  end
 
 
 
                  if page_source_name == 'timesofindia.indiatimes.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_indiatimes doc
                  end
 
                  if page_source_name == 'economictimes.indiatimes.com' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_economictimes doc
                  end
 
 
 
                  if page_source_name == 'www.theaustralian.news.com.au' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_australian doc
                  end
 
                  if page_source_name == 'www.theage.com.au' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_theage doc
                  end
 
                  if page_source_name == 'www.smh.com.au' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_sidney doc
                  end
 
 
 
                  if page_source_name == 'www.sptimes.ru' 
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_sptimes doc
                  end
 
                  if page_source_name == 'www.moscowtimes.ru' 
                    item_link = item_link + '&print=Y'
-                        doc =Hpricot(open(item_link))
+                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                          a= read_moscowtimes doc
                  end
 
                  if page_source_name == 'www.haaretz.com' 
                    item_link = item_link.sub('spages/', 'objects/pages/PrintArticleEn.jhtml?itemNo=')
                    item_link = item_link.sub('.html','')
-                         doc =Hpricot(open(item_link))
+                         doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                           a= read_haaretz doc
                  end
 
                   if page_source_name == 'www.jpost.com' 
-                         doc =Hpricot(open(item_link))
+                         doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                           a= read_jpost doc
                   end
 
 
 
        if page_source_name == 'www.spiegel.de' 
-           f = open(item_link)
+           f = open(item_link, :read_timeout => $timeout_in_seconds)
            f.rewind
            doc = Hpricot(Iconv.conv('utf-8', f.charset, f.readlines.join("\n")))
            a= read_spiegel doc
        end
        
        if page_source_name == 'www.reuters.com' 
-                       doc =Hpricot(open(item_link))
+                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
                         a= read_reuters doc
         end
 
      
       if page_source_name == 'www.cfr.org' 
-        doc =Hpricot(open(item_link))
+        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
          a= read_cfr doc
        end
 
@@ -2359,9 +2360,10 @@ end
          stories_hashed     = stories.group_by{|s| s.feedpage_id} 
        end
        @feedpages.each do |page| 
+         begin
            page.previous_size = stories_hashed[page.id].to_a.size
            page.save
-           feed = FeedTools::Feed.open(page.url)
+           feed = FeedTools::Feed.open(page.url, :http_timeout => $timeout_in_seconds)
 
 
            feed.items.each do |item|    
@@ -2415,11 +2417,17 @@ end
                    # end
                   #end
                   # end
+              
+                   rescue Timeout::Error => e
+                     raise e
                    rescue Exception => e
                    #@uncrawled_stories = @uncrawled_stories + [item] 
 
                end  
            end  
+         rescue Exception => e
+            next
+         end
        end
        finishing_time = Time.new
        duration = (finishing_time - starting_time)/60

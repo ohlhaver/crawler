@@ -7,12 +7,13 @@ require File.dirname(__FILE__) + "/../../config/environment"
 require 'rubygems'
 require 'feed_tools'
 require 'hpricot'
-require 'open-uri'
+require 'rubygems/open-uri'
 require 'iconv'
 
 
 
 $running = true;
+$timeout_in_seconds = 4
 Signal.trap("TERM") do 
   $running = false
 end
@@ -31,58 +32,58 @@ end
         end
 
         if page_source_name == 'news.bbc.co.uk' 
-         doc =Hpricot(open(item_link))
+         doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
           a= read_bbc doc, item
         end
         
             if page_source_name == 'financialtimes.a.mms.mavenapps.net' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_ft doc, item
             end
 
             if page_source_name == 'audiovideo.economist.com' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_economist doc, item
             end
 
             if page_source_name == 'www.wsj.com' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_wsj doc, item
             end
 
             if page_source_name == 'link.brightcove.com' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_slatev doc, item
             end
 
             if page_source_name == 'feedroom.businessweek.com' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_bweek doc, item
             end
 
             if page_source_name == 'www.guardian.co.uk' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_guardian doc, item
             end
 
 
             if page_source_name == 'www.c-span.org' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_cspan doc, item
             end
 
             if page_source_name == 'www.youtube.com' 
-             doc =Hpricot(open(item_link))
+             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_youtube doc, item
             end
 
             if page_source_name == 'www.euronews.net' 
-              doc =Hpricot(open(item_link))
+              doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_euronews doc, item
             end
 
             if page_source_name == 'www.zeit.de' 
-              doc =Hpricot(open(item_link))
+              doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
               a= read_zeit doc, item
             end
         
@@ -562,9 +563,10 @@ end
 
 
       @feedpages.each do |page| 
+        begin
           page.previous_size = stories_hashed[page.id].to_a.size
           page.save
-          feed = FeedTools::Feed.open(page.url)
+          feed = FeedTools::Feed.open(page.url, :http_timeout => $timeout_in_seconds)
 
 
           feed.items.each do |item|    
@@ -619,11 +621,16 @@ end
                   # end
                  #end
                  # end
+                 rescue Timeout::Error => e
+                   raise e
                   rescue Exception => e
                   #@uncrawled_stories = @uncrawled_stories + [item] 
 
               end  
           end  
+         rescue Exception => e
+            next
+         end
       end
       finishing_time = Time.new
       duration = (finishing_time - starting_time)/60
