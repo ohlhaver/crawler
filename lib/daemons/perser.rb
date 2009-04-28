@@ -990,7 +990,7 @@ end
                        @story.keywords = keywords
                        @story.save    
                     #end
-                    rescue StandardError, Interrupt
+                    rescue Exception => e
                     #@uncrawled_stories = @uncrawled_stories + [item] 
 
                 end  
