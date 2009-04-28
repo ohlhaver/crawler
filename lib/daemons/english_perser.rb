@@ -2359,7 +2359,7 @@ end
          stories_hashed     = stories.group_by{|s| s.feedpage_id} 
        end
        @feedpages.each do |page| 
-           page.previous_size = stories_hashed[page.id].size
+           page.previous_size = stories_hashed[page.id].to_a.size
            page.save
            feed = FeedTools::Feed.open(page.url)
 
