@@ -228,7 +228,6 @@ end
       end
 
       if page_source_name == 'derstandard.at' 
-          item_link = item_link.sub("?url=/%3F", "text/?")
           doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
           a= read_derstandard doc
       end
@@ -467,65 +466,61 @@ end
   end
   
   def read_sueddeutsche doc
-       roof_title = (doc/"h2.artikelDachzeile").inner_text
-       title = (doc/"h1.artikelTitel").inner_text
-       title = roof_title + ': ' + title if roof_title != ''
 
-       author = (doc/"span.artikelAutor").inner_text
-       opinionated = 1 if author.match('Kommentar')
-       opinionated = 1 if author.match('Analyse')
-       opinionated = 1 if author.match('Außenansicht')
-       opinionated = 1 if author.match('kommentar')
-       opinionated = 1 if author.match('Klagelied')
-       opinionated = 1 if author.match('Nachruf')
-       opinionated = 1 if author.match('Glosse')
-       opinionated = 1 if author.match('Kritik')
-       opinionated = 1 if author.match('kritik')
-       opinionated = 1 if author.match('Interview')
-       
-       
-       unless author == nil
-           author = author.sub('Eine Analyse von ', '+')
-           author = author.sub('Eine Außenansicht von ', '+')
-           author = author.sub('Ein Audiokommentar von ', '+')
-           author = author.sub('Ein Gastkommentar von ', '+')
-           author = author.sub('Ein Klagelied von ', '+')
-           author = author.sub('Ein Kommentar von ', '+')
-           author = author.sub('Ein Nachruf von ', '+')
-           author = author.sub('Ein Rückblick von ', '+')
-           author = author.sub('Ein Rückblick in Bildern von ', '+')
-           author = author.sub('Ein Überblick von  ', '+')
-           author = author.sub('Eine Glosse von ', '+')
-           author = author.sub('Eine Nachtkritik von ', '+')
-           author = author.sub('Eine Reportage von ', '+')
-           author = author.sub('Interview:  ', '+')
-           author = author.sub('Interview: ', '+')
-           author = author.sub('Interview von ', '+')
-           author = author.sub('Eine Reportage von ', '+')
+      roof_title = (doc/"h2.artikelDachzeile").inner_text
+      #title = (doc/"h1.artikelTitel").inner_text
+      #title = roof_title + ': ' + title
+      author = (doc/"td/p/cite").inner_text
+      unless author.empty?
+          author = author.sub('Eine Analyse von ', '+')
+          author = author.sub('Eine Außenansicht von ', '+')
+          author = author.sub('Ein Audiokommentar von ', '+')
+          author = author.sub('Ein Gastkommentar von ', '+')
+          author = author.sub('Ein Klagelied von ', '+')
+          author = author.sub('Ein Kommentar von ', '+')
+          author = author.sub('Ein Nachruf von ', '+')
+          author = author.sub('Ein Rückblick von ', '+')
+          author = author.sub('Ein Rückblick in Bildern von ', '+')
+          author = author.sub('Ein Überblick von  ', '+')
+          author = author.sub('Eine Glosse von ', '+')
+          author = author.sub('Eine Nachtkritik von ', '+')
+          author = author.sub('Eine Reportage von ', '+')
+          author = author.sub('Interview:  ', '+')
+          author = author.sub('Interview von ', '+')
+          author = author.sub('Eine Reportage von ', '+')
 
 
-           author = author.gsub('Von ', '+')
-           author = author.gsub(' und ', '+')
-           author = author.gsub(',', '+')
-           author = author.gsub('-', '2')
-           author = author.gsub('.', '1')
-           author = author.gsub(' ', '0')
-           author = author.gsub('+', ' ')
-           author_array = author.scan(/\w+/)
-           author = author_array[0]
-           author = author.gsub('0', ' ')
-           author = author.gsub('1', '.')
-           author = author.gsub('2', '-')
+          author = author.gsub('Von ', '+')
+          author = author.gsub(' und ', '+')
+          author = author.gsub(',', '+')
+          author = author.gsub('-', '2')
+          author = author.gsub('.', '1')
+          author = author.gsub(' ', '0')
+          author = author.gsub('+', ' ')
+          author = author.gsub('ä', '3')
+          author = author.gsub('ü', '4')
+          author = author.gsub('ö', '5')
+          author = author.gsub('á', '6')
+          author_array = author.scan(/\w+/)
+          author = author_array[0]
+          author = author.gsub('0', ' ')
+          author = author.gsub('1', '.')
+          author = author.gsub('2', '-')
+          author = author.gsub('3', 'ä')
+          author = author.gsub('4', 'ü')
+          author = author.gsub('5', 'ö')
+          author = author.gsub('6', 'á')
 
-       end
-       intro = (doc/"p.artikelTeaser/strong").inner_text
+      end
+      intro = (doc/"p.artikelTeaser").inner_text
 
 
-       doc =(doc/"table.bgf2f2f2")
-       text = doc.inner_text
-       text = intro + ' ' + text
+      text =(doc/"div.main/p").inner_text
+      text =(doc/"p.artikelFliestext").inner_text if text == ''
 
-       return author, text, title, opinionated
+      text = intro + ' ' + text
+
+      return author, text
   end
   
   def read_zeit doc
@@ -651,14 +646,13 @@ end
   end
 
   def read_derstandard doc
-      author = (doc/"p.Author").inner_html
-      #author = (doc/"a[4]/b").inner_text if author == ''
-      author = author.sub('Von ', '') unless author == nil
-      doc = (doc/"font.m")
-      text = doc.inner_text
-    
-      text = text.sub('derStandard.at | Politik | Investor | Web | Sport | Panorama | Etat | Kultur | Wissenschaft | Meinung | Zeitungsarchiv? | Suche:', '')
-      text = text.sub('derStandard.at | Politik | Investor | Web | Sport | Panorama | Etat | Kultur | Wissenschaft | Meinung | Zeitungsarchiv', '' )
+     author = (doc/"p.Author").inner_html
+
+    author = (doc/"a[4]/b").inner_text if author == ''
+    author = author.sub('Von ', '') unless author == nil
+      intro = (doc/"#artikelBody/h2")
+      doc = (doc/"#artikelBody/p")
+      text = intro.inner_text + " " + doc.inner_text
       return author, text
   end
 

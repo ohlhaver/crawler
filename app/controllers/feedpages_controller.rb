@@ -92,6 +92,7 @@ class FeedpagesController < ApplicationController
      @feedpage.topic = params[:topic]
      @feedpage.opinionated = params[:opinionated]
      @feedpage.video = params[:video]
+     @feedpage.previous_size = 0
      
      source_name = 'www.taz.de' if (@feedpage.url).match('www.taz.de')
      source_name = 'www.kicker.de' if (@feedpage.url).match('kicker.de')
