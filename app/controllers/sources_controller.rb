@@ -5,7 +5,7 @@ class SourcesController < ApplicationController
 def show
   @source = Source.find(params[:id])
   @feedpages = @source.feedpages.find(:all, :order => 'feedpages.id DESC')
-  @rawstories_published = @source.rawstories.find(:all, :order => 'rawstories.id DESC', :limit => '10')
+  @rawstories_published = Rawstory.find(:all, :conditions => "source_id = #{@source.id}", :order => 'rawstories.id DESC', :limit => '10')
 end
 
 def index

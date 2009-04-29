@@ -2,7 +2,7 @@
  <h4> <%= link_to feedpage.publication, feedpage %>
 
 - <%= link_to '>>', feedpage.url  %> -- <%= 'active' if feedpage.Active == 1 %><%= 'inactive' if feedpage.Active != 1 %> <%= link_to 'activate', :controller => 'feedpages', :action => 'activate', :id => feedpage.id if feedpage.Active != 1 %><%= link_to 'deactivate', :controller => 'feedpages', :action => 'deactivate', :id => feedpage.id if feedpage.Active == 1 %> <%= '  --  ' %>
-<%= link_to 'reset', {:controller => 'feedpages', :action => 'empty', :id => feedpage.id}, :confirm => 'Delete all stories from ' + feedpage.publication + ' ?', :post => true %><%= ' -- Size: ' + feedpage.rawstories.size.to_s + ' -- Added: ' +  (feedpage.rawstories.size.to_i - feedpage.previous_size.to_i).to_s + ' -- ' %> 
+<%= link_to 'reset', {:controller => 'feedpages', :action => 'empty', :id => feedpage.id}, :confirm => 'Delete all stories from ' + feedpage.publication + ' ?', :post => true %><%= ' -- Size: ' + feedpage.story_count.to_s + ' -- Added: ' +  (feedpage.story_count - feedpage.previous_size).to_s + ' -- Last Story at : ' + feedpage.last_story_at.to_s + ' -- '%> 
 
 <%= link_to 'remove', {:controller => 'feedpages', :action => 'remove', :id => feedpage.id}, :confirm => 'Remove ' + feedpage.publication + ' feedpage completely?', :post => true %> - <%= 'English' if feedpage.language == 1 %> <%= 'deutsch' if feedpage.language == 2 %> - 
 

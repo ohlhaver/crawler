@@ -2352,20 +2352,18 @@ end
        @feedpages         = Feedpage.find(:all, :conditions => 'Active = 1')  
        @feedpages         = @feedpages.find_all{|l| l.language == 1 }
        @feedpages         = @feedpages.find_all{|l| l.video != true  }
-       feedpage_ids       = @feedpages.collect{|f| f.id}.uniq*","
-       unless feedpage_ids.blank?
-         stories            = Rawstory.find(:all,
-                                            :conditions => ["feedpage_id IN ( #{feedpage_ids})"],
-                                            :select     => 'id, feedpage_id')
-         stories_hashed     = stories.group_by{|s| s.feedpage_id} 
-       end
+       #feedpage_ids       = @feedpages.collect{|f| f.id}.uniq*","
+       #unless feedpage_ids.blank?
+       #  stories            = Rawstory.find(:all,
+       #                                     :conditions => ["feedpage_id IN ( #{feedpage_ids})"],
+       #                                     :select     => 'id, feedpage_id')
+       #  stories_hashed     = stories.group_by{|s| s.feedpage_id} 
+       #end
        @feedpages.each do |page| 
          begin
-           page.previous_size = stories_hashed[page.id].to_a.size
-           page.save
+           last_story_at = nil
+           new_stories = 0
            feed = FeedTools::Feed.open(page.url, :http_timeout => $timeout_in_seconds)
-
-
            feed.items.each do |item|    
                begin
                  #if stories_to_check.find_all{|l| l.title == item.title} == []
@@ -2412,7 +2410,10 @@ end
                    @story.opinion = opinionated
                    @story.language = language
                    @story.keywords = keywords
+
+                   last_story_at = Time.now
                    @story.save
+                   new_stories += 1
                    
                    # end
                   #end
@@ -2425,6 +2426,15 @@ end
 
                end  
            end  
+           page.source.update_attributes(:last_story_at => last_story_at) if last_story_at
+           # update the information for the feedpage
+            if new_stories > 0
+             page.previous_size = page.story_count
+             page.story_count  += new_stories
+            end
+            page.last_story_at = last_story_at if last_story_at
+            page.save if new_stories > 0 or last_story_at
+
          rescue Exception => e
             next
          end

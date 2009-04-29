@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090205155801) do
+ActiveRecord::Schema.define(:version => 2) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -34,13 +34,14 @@ ActiveRecord::Schema.define(:version => 20090205155801) do
     t.string   "website"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "source_id",     :limit => 11
-    t.integer  "Active",        :limit => 11
-    t.integer  "previous_size", :limit => 11
-    t.integer  "opinionated",   :limit => 11
-    t.integer  "language",      :limit => 11
-    t.integer  "topic",         :limit => 11
+    t.integer  "source_id",         :limit => 11
+    t.integer  "Active",            :limit => 11
+    t.integer  "previous_size",     :limit => 11
+    t.integer  "opinionated",       :limit => 11
+    t.integer  "language",          :limit => 11
+    t.integer  "topic",             :limit => 11
     t.boolean  "video"
+    t.integer  "subscription_type", :limit => 11, :default => 0, :null => false
   end
 
   create_table "groups", :force => true do |t|
@@ -100,11 +101,8 @@ ActiveRecord::Schema.define(:version => 20090205155801) do
     t.integer  "group_id",    :limit => 11
     t.integer  "haufen_id",   :limit => 11
     t.string   "keywords"
-    t.integer  "titlehash",   :limit => 11
-    t.integer  "linkhash",    :limit => 11
     t.boolean  "video"
     t.integer  "hscore",      :limit => 11
-    t.integer  "nhaufen",     :limit => 11
   end
 
   add_index "rawstories", ["title"], :name => "index_rawstories_on_title", :unique => true
@@ -115,6 +113,7 @@ ActiveRecord::Schema.define(:version => 20090205155801) do
     t.string   "website"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_story_at"
   end
 
   create_table "subscriptions", :force => true do |t|
@@ -139,7 +138,6 @@ ActiveRecord::Schema.define(:version => 20090205155801) do
     t.text     "new_stories"
     t.boolean  "alerts"
     t.string   "searchterms"
-    t.boolean  "full"
     t.integer  "language",                  :limit => 11
   end
 

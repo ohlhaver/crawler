@@ -72,7 +72,7 @@ class FeedpagesController < ApplicationController
 
   def show
     @feedpage = Feedpage.find(params[:id])
-    @rawstories_published = @feedpage.rawstories.find(:all, :order => 'rawstories.id DESC', :limit => '50')
+    @rawstories_published = Rawstory.find(:all, :conditions => "feedpage_id = #{@feedpage.id}", :order => 'rawstories.id DESC', :limit => '20')
  
   end
 
