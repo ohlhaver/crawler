@@ -2,7 +2,7 @@
  <b> <%= link_to rawstory.title, rawstory %><%= ' (opinion)' if rawstory.opinion == 1 %></b> - <%= 'Headline score:' + rawstory.hscore.to_s %> 
 <br>
 
-<%= link_to rawstory.author.name, rawstory.author %><%= ' - ' if rawstory.author.name != '' %><%= link_to rawstory.source.website, rawstory.source  %> - <%= rawstory.created_at %> <br>
+<%= rawstory.author.name %><%= ' - ' if rawstory.author.name != '' %><%= link_to rawstory.source.website, rawstory.source  %> - <%= rawstory.created_at %> <br>
 
 <%= rawstory.keywords %><br><br>
 <% end %>
