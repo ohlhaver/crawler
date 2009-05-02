@@ -92,11 +92,12 @@ class FeedpagesController < ApplicationController
      @feedpage.topic = params[:topic]
      @feedpage.opinionated = params[:opinionated]
      @feedpage.video = params[:video]
+     @feedpage.previous_size = 0
      
      source_name = 'www.taz.de' if (@feedpage.url).match('www.taz.de')
      source_name = 'www.kicker.de' if (@feedpage.url).match('kicker.de')
      source_name = 'www.cicero.de Blogs' if (@feedpage.url).match('www.cicero.de/rss/rss2')
-     source_name = find_source_name feed.link if source_name == nil
+     source_name = find_source_name(feed.link||feed.url) if source_name == nil
 
      
      

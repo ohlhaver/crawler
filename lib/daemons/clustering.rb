@@ -195,7 +195,7 @@ def build_haufens
     haufen.pilot       = group.pilot
     haufen.language    = group.language
     #haufen.weight = group.weight
-    haufen.broadness = (group.broadness * 10) + group.weight
+    haufen.broadness = (group.broadness * 100) + group.weight
     #ok_stories = stories_hashed[group.id].find_all {|u| u.hscore > 0 }
     #if ok_stories.size != 0
     #  haufen.latest = ok_stories.first.id
