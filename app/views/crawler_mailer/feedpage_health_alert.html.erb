@@ -1,0 +1,26 @@
+Health metrics indicate a possible problem with crawling and parsing of the following feedpage :
+
+Feedpage url :  <%= @feedpage.url %>
+Feedpage website:  <%= @feedpage.website %>
+Source name:  <%= @feedpage.source.name %>
+Source website:  <%= @feedpage.source.website %>
+
+<%
+last_week_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::LASTWEEK}.first 
+sum_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::SUM}.first 
+maximum_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::MAXIMUM}.first 
+%>
+Last Week Metrics:
+  Titles Crawled  : <%= last_week_health.title_count %>
+  Authors Crawled : <%= last_week_health.author_count %>
+  Body Crawled : <%= last_week_health.body_count %>
+
+Average  Metrics:
+  Titles Crawled  : <%= sum_health.week_count > 0 ? sum_health.title_count/sum_health.week_count.to_f : 0 %>
+  Authors Crawled : <%= sum_health.week_count > 0 ? sum_health.author_count/sum_health.week_count.to_f : 0 %>
+  Body Crawled : <%= sum_health.week_count > 0 ? sum_health.body_count/sum_health.week_count.to_f : 0 %>
+
+Maximum  Metrics:
+  Titles Crawled  : <%= maximum_health.title_count %>
+  Authors Crawled : <%= maximum_health.author_count %>
+  Body Crawled : <%= maximum_health.body_count %>

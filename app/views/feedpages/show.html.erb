@@ -3,6 +3,10 @@
 <%= 'OPINIONATED' if @feedpage.opinionated == 1 %>
 <%= link_to 'de-opinionate!', :controller => 'feedpages', :action => 'deopinionate', :id => @feedpage.id if @feedpage.opinionated == 1 %>
 <%= link_to 'opinionate!', :controller => 'feedpages', :action => 'opinionate', :id => @feedpage.id if @feedpage.opinionated != 1 && @feedpage.publication != '' %>
+<br/>
+<b>Health Metrics</b> --
+<%= render :partial => @feedpage.feedpage_health_metrics -%>
+<br/>
 
 <br><br>
 <div id="rawstories_published">

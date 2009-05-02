@@ -12,7 +12,10 @@
 
 <%= 'general' if feedpage.opinionated != 1 %> <%= 'opinions' if feedpage.opinionated == 1 %> 
 <%= ' - VIDEOS' if feedpage.video == true %> 
-
+<br/>
+<b>Health Metrics</b> --
+<%= render :partial => feedpage.feedpage_health_metrics -%>
+<br/>
 <% form_for feedpage do |f| %>
 <% languages = {'English' => 1, 'deutsch' => 2} %>
 <%= select_tag(:language, options_for_select(languages, params[:language] ))  %>

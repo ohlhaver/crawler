@@ -1,0 +1,22 @@
+<% m = feedpage_health_metric %>
+<span>
+<%= 
+case m.metric_type
+when FeedpageHealthMetric::MetricType::LASTWEEK
+'Last Week: '
+when FeedpageHealthMetric::MetricType::SUM
+'Average: ' 
+when FeedpageHealthMetric::MetricType::MAXIMUM
+'Maximum: '
+end
+%>
+</span>
+<% if m.week_count > 0 -%>
+  <% if m.metric_type  == FeedpageHealthMetric::MetricType::SUM -%>
+  (title :<%= m.title_count/m.week_count.to_f %> author :<%= m.author_count/m.week_count.to_f %> body : <%= m.body_count/m.week_count.to_f %>)
+  <% else -%>
+  (title :<%= m.title_count %> author :<%= m.author_count %> body : <%= m.body_count %>)
+  <% end -%>
+<% else -%>
+  N.A.
+<% end -%>

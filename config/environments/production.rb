@@ -1,4 +1,6 @@
 # Settings specified here will take precedence over those in config/environment.rb
+SITE_EMAIL = "jurnalo.user.service@googlemail.com"
+SITE_NAME = "Jurnalo"
 
 # The production environment is meant for finished, "live" apps.
 # Code is not reloaded between requests
@@ -20,4 +22,4 @@ config.action_view.cache_template_loading            = true
 
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
-ExceptionNotifier.exception_recipients = %w(ohlhaver@gmail.com)
+ExceptionNotifier.exception_recipients = %w(ohlhaver@gmail.com jrath95@gmail.com ubhay.iitd@gmail.com sinha.riteshk@gmail.com)
