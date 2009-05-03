@@ -987,6 +987,12 @@ end
                        last_story_at = Time.now
                        @story.save    
                        new_stories += 1
+
+                       # Save quality and subscription details
+                       RawstoryDetail.create!(:rawstory_id => @story.id, 
+                                              :subscription_type => page.subscription_type,
+                                              :quality => page.quality)
+
                     #end
                     rescue Timeout::Error => e
                       raise e

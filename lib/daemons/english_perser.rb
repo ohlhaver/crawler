@@ -2415,10 +2415,11 @@ end
                    @story.save
                    new_stories += 1
                    
-                   # end
-                  #end
-                  # end
-              
+                   # Save quality and subscription details
+                   RawstoryDetail.create!(:rawstory_id => @story.id, 
+                                          :subscription_type => page.subscription_type,
+                                          :quality => page.quality)
+                                
                    rescue Timeout::Error => e
                      raise e
                    rescue Exception => e

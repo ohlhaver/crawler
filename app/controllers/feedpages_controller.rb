@@ -88,11 +88,10 @@ class FeedpagesController < ApplicationController
      feed = FeedTools::Feed.open(@feedpage.url)
      @feedpage.website = feed.link 
      @feedpage.publication = feed.title
-     @feedpage.language = params[:language]
-     @feedpage.topic = params[:topic]
-     @feedpage.opinionated = params[:opinionated]
-     @feedpage.video = params[:video]
      @feedpage.previous_size = 0
+     @feedpage.quality ||= JConst::Quality::MEDIUM if @feedpage.video 
+     @feedpage.quality ||= JConst::Quality::LOW if JConst::SubscriptionType.login_required?(@feedpage.subscription_type)
+
      
      source_name = 'www.taz.de' if (@feedpage.url).match('www.taz.de')
      source_name = 'www.kicker.de' if (@feedpage.url).match('kicker.de')
@@ -120,18 +119,10 @@ class FeedpagesController < ApplicationController
   end
 
   def update
+    @feedpage = Feedpage.find(params[:id])
 
-      @feedpage = Feedpage.find(params[:id])
-      @feedpage.language = params[:language]
-      @feedpage.topic = params[:topic]
-      @feedpage.opinionated = params[:opinionated]
-      @feedpage.video = params[:video]
-
-      @feedpage.save
-       render :action => 'new'
-
-
-
+    @feedpage.update_attributes!(params[:feedpage])
+    render :action => 'new'
   end
 
 

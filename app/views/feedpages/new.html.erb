@@ -6,17 +6,22 @@
   RSS-feed url:<br />
   <%= f.text_field :url %>
 </p>
-<% languages = {'English' => 1, 'deutsch' => 2} %>
-<%= select_tag(:language, options_for_select(languages, params[:language] ))  %>
+<% languages = [['English',1], ['deutsch', 2]] %>
+<%= f.select :language, languages   %>
 
-<% topics = {'Any topic' => 1, 'Politics' => 2, 'Business' => 5, 'Culture' => 3, 'Science' => 4, 'Sport' => 6, 'Mixed' => 7, 'Humor' => 8, 'Technology' => 9} %>
-<%= select_tag(:topic, options_for_select(topics, params[:topic]))  %>
+<% topics = [['Any topic', 1], ['Politics', 2],['Business', 5],['Culture', 3],['Science', 4],['Sport', 6],['Mixed', 7],['Humor', 8],['Technology', 9] ] %>
+<%= f.select :topic, topics  %>
 
-<% types = {'All' => 0, 'Only opinions' => 1} %>
-<%= select_tag(:opinionated, options_for_select(types, params[:opinionated] ))  %>
+<% types = [['All', 0],['Only opinions', 1]] %>
+<%= f.select :opinionated, types  %>
 
-<% types = {'All' => 0, 'Only videos' => 1} %>
-<%= select_tag(:video, options_for_select(types, params[:video] ))  %>
+<% types = [['All', false],['Only videos',true]] %>
+<%= f.select :video, types  %>
+
+<% qualities =  [['High',JConst::Quality::HIGH],['Medium',JConst::Quality::MEDIUM],['Low',JConst::Quality::LOW]]%>
+<%= f.select :quality, qualities -%>
+<% types = [['Free',JConst::SubscriptionType::FREE_LOGIN_NOT_NEEDED],['Free & Login needed',JConst::SubscriptionType::FREE_LOGIN_NEEDED], ['Paid & Login needed',JConst::SubscriptionType::PAID_LOGIN_NEEDED]]%>
+<%= f.select :subscription_type, types -%>
 
 <p>
   <%= submit_tag %>
