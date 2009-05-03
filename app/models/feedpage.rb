@@ -56,7 +56,7 @@ class Feedpage < ActiveRecord::Base
        page_last_calculated_upto = sum_metric.calculated_upto
        page_next_calculated_upto = page_last_calculated_upto + 7.days
 
-       while page_next_calculated_upto < current_monday
+       while page_next_calculated_upto <= current_monday
          page_week_stories = page_stories.find_all{|s| s.created_at >= page_last_calculated_upto and s.created_at < page_next_calculated_upto}
          new_weeks        += 1
          week_title_count, week_author_count, week_body_count = 0,0,0
