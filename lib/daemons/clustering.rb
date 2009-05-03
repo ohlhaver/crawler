@@ -200,7 +200,21 @@ def build_haufens
     #if ok_stories.size != 0
     #  haufen.latest = ok_stories.first.id
     #  else
-    haufen.latest = stories_hashed[group.id].first.id
+    haufen_stories = stories_hashed[group.id]
+    highest_blub   = 0
+    haufen_stories.each_with_index do |story, ind|
+      age = ((Time.new - story.created_at)/3600).to_i 
+      age = 1 if age < 1
+      age = (100*(1/(age**(0.33)))).to_i 
+      quality_value = story.rawstory_detail.quality rescue 1
+      blub =  age*quality_value
+      if ind == 0 or blub > highest_blub
+        haufen.latest = story.id 
+        highest_blub  = blub
+      end   
+    end
+    
+    
     #end
     group_stories = stories_hashed[group.id]
     haufen.weight = group_stories.size
@@ -266,7 +280,7 @@ end
 while($running) do
    Eintrag.create(:name => 'clustering started')
    clustering_start_time = Time.now   
-   $current_stories = Rawstory.find(:all, :conditions => ['created_at > :date', {:date => Time.now.yesterday}], :order => 'rawstories.id DESC', :include => [:feedpage]) 
+   $current_stories = Rawstory.find(:all, :conditions => ['created_at > :date', {:date => Time.now.yesterday}], :order => 'rawstories.id DESC', :include => [:feedpage, :rawstory_detail]) 
    $current_stories_hashed = $current_stories.group_by{|s| s.id}
    build_groups
    build_haufens
