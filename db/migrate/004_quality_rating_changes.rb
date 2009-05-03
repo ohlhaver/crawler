@@ -19,7 +19,8 @@ class QualityRatingChanges < ActiveRecord::Migration
     video_page_ids = video_pages.collect{|p| p.id}*","
     unless video_page_ids.blank?
       Feedpage.update_all(["quality = #{JConst::Quality::MEDIUM}"],["id IN ( #{video_page_ids} )"])
-      execute("update rawstory_details r1, rawstories r set r1.quality = #{JConst::Quality::MEDIUM} where r1.rawstory_id = r.id and r.feedpage_id IN ( #{video_page_ids} )")
+      rs_ids = Rawstory.find(:all, :conditions => "feedpage_id IN ( #{video_page_ids} )", :select => "id").collect{|s| s.id}.uniq*','
+      RawstoryDetail.update_all("quality = #{JConst::Quality::MEDIUM}"," rawstory_id IN ( #{rs_ids} )") unless rs_ids.blank?
     end
   end
 
