@@ -7,7 +7,7 @@ class Feedpage < ActiveRecord::Base
 
   def create_health_metrics(monday=nil)
     FeedpageHealthMetric.metric_types.collect do |metric_type|
-      monday ||= Time.now .monday
+      monday ||= Time.now.monday
       FeedpageHealthMetric.create!(
         :feedpage_id     => self.id,
         :source_id       => self.source_id,
