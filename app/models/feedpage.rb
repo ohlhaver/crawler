@@ -35,7 +35,7 @@ class Feedpage < ActiveRecord::Base
      # Find all the stories created after last_caculated_upto value
      new_stories           = Rawstory.find(:all,
                                            :conditions => ["created_at >= ?", last_caculated_upto], 
-                                           :select => "id,feedpage_id, (title IS NULL or title = '') as is_title_empty, (author_id IS NULL or author_id = '') as is_author_empty, (body IS NULL or body = '') as is_body_empty")
+                                           :select => "id,feedpage_id, created_at, (title IS NULL or title = '') as is_title_empty, (author_id IS NULL or author_id = '') as is_author_empty, (body IS NULL or body = '') as is_body_empty")
      new_stories_hashed     = new_stories.group_by{|s| s.feedpage_id }
 
      feedpages.each do |page|
