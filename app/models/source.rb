@@ -4,6 +4,7 @@ class Source < ActiveRecord::Base
   has_many :feedpage_health_metrics
 
   def get_health_metrics
+    return [] if self.feedpage_health_metrics.blank?
     metrics_hashed   = self.feedpage_health_metrics.group_by{|m| m.metric_type}
     lastweek_metrics = metrics_hashed[FeedpageHealthMetric::MetricType::LASTWEEK] 
     sum_metrics      = metrics_hashed[FeedpageHealthMetric::MetricType::SUM] 
