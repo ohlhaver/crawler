@@ -6,9 +6,9 @@ class Source < ActiveRecord::Base
   def get_health_metrics
     return [] if self.feedpage_health_metrics.blank?
     metrics_hashed   = self.feedpage_health_metrics.group_by{|m| m.metric_type}
-    lastweek_metrics = metrics_hashed[FeedpageHealthMetric::MetricType::LASTWEEK] 
-    sum_metrics      = metrics_hashed[FeedpageHealthMetric::MetricType::SUM] 
-    maximum_metrics  = metrics_hashed[FeedpageHealthMetric::MetricType::MAXIMUM] 
+    lastweek_metrics = metrics_hashed[FeedpageHealthMetric::MetricType::LASTWEEK].to_a
+    sum_metrics      = metrics_hashed[FeedpageHealthMetric::MetricType::SUM].to_a
+    maximum_metrics  = metrics_hashed[FeedpageHealthMetric::MetricType::MAXIMUM].to_a 
     lastweek_health = FeedpageHealthMetric.new(
       :metric_type  =>  FeedpageHealthMetric::MetricType::LASTWEEK,
       :title_count  =>  lastweek_metrics.sum{|m| m.title_count},

@@ -43,13 +43,14 @@ class Feedpage < ActiveRecord::Base
        # Create them if they do not exist
        page_metrics     = health_metrics_hashed[page.id]
        page_metrics     = page.create_health_metrics if page_metrics.blank?
+       
+       last_week_metric = page_metrics.find_all{|m| m.metric_type == FeedpageHealthMetric::MetricType::LASTWEEK}.first
+       sum_metric       = page_metrics.find_all{|m| m.metric_type == FeedpageHealthMetric::MetricType::SUM}.first
+       maximum_metric   = page_metrics.find_all{|m| m.metric_type == FeedpageHealthMetric::MetricType::MAXIMUM}.first
 
        # Get the latest stories for the feedpage
-       page_stories     = new_stories[page.id].to_a
-       
-       last_week_metric = page_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::LASTWEEK}.first
-       sum_metric       = page_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::SUM}.first
-       maximum_metric   = page_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::MAXIMUM}.first
+       page_stories     = new_stories_hashed[page.id].to_a
+
 
        week_counts = []
 
