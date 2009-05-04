@@ -4,6 +4,7 @@
     <%= source.last_story_at.to_s %>
     <b><%= ' - EXTREMELY' if (Time.now - source.last_story_at) > 43200 %>
        <%= ' OLD' if (Time.now - source.last_story_at) > 3600 %></b>&nbsp;
+     <br/>
     <b>Health Metrics</b> --
     <%= render :partial => source.get_health_metrics -%>
   <% end %>

@@ -1,4 +1,4 @@
-class Source < ActiveRecord::Base
+lass Source < ActiveRecord::Base
   has_many :feedpages
   has_many :rawstories
   has_many :feedpage_health_metrics
@@ -13,7 +13,8 @@ class Source < ActiveRecord::Base
       :metric_type  =>  FeedpageHealthMetric::MetricType::LASTWEEK,
       :title_count  =>  lastweek_metrics.sum{|m| m.title_count},
       :author_count =>  lastweek_metrics.sum{|m| m.author_count},
-      :body_count   =>  lastweek_metrics.sum{|m| m.body_count}
+      :body_count   =>  lastweek_metrics.sum{|m| m.body_count},
+      :week_count   =>  lastweek_metrics.collect{|m| m.week_count}.max || 0
     )
     
     sum_health = FeedpageHealthMetric.new(
@@ -24,13 +25,13 @@ class Source < ActiveRecord::Base
       :week_count   =>  sum_metrics.collect{|m| m.week_count}.max || 0
     )
 
-    maximum_health = FeedpageHealthMetric.new(
-      :metric_type  =>  FeedpageHealthMetric::MetricType::MAXIMUM,
-      :title_count  =>  maximum_metrics.collect{|m| m.title_count}.max || 0,
-      :author_count =>  maximum_metrics.collect{|m| m.author_count}.max || 0,
-      :body_count   =>  maximum_metrics.collect{|m| m.body_count}.max || 0,
-      :week_count   =>  maximum_metrics.collect{|m| m.week_count}.max || 0
-    )
-    return [lastweek_health, sum_health, maximum_health]
+    #maximum_health = FeedpageHealthMetric.new(
+    #  :metric_type  =>  FeedpageHealthMetric::MetricType::MAXIMUM,
+    #  :title_count  =>  maximum_metrics.collect{|m| m.title_count}.max || 0,
+    #  :author_count =>  maximum_metrics.collect{|m| m.author_count}.max || 0,
+    #  :body_count   =>  maximum_metrics.collect{|m| m.body_count}.max || 0,
+    #  :week_count   =>  maximum_metrics.collect{|m| m.week_count}.max || 0
+    #)
+    return [lastweek_health, sum_health]#, maximum_health]
   end
 end
