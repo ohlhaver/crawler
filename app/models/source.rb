@@ -1,4 +1,4 @@
-lass Source < ActiveRecord::Base
+Class Source < ActiveRecord::Base
   has_many :feedpages
   has_many :rawstories
   has_many :feedpage_health_metrics
