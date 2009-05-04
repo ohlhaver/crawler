@@ -1,14 +1,15 @@
 Health metrics indicate a possible problem with crawling and parsing of the following feedpage :
 
+Feedpage publication :  <%= @feedpage.publication %>
 Feedpage url :  <%= @feedpage.url %>
 Feedpage website:  <%= @feedpage.website %>
 Source name:  <%= @feedpage.source.name %>
 Source website:  <%= @feedpage.source.website %>
 
 <%
-last_week_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::LASTWEEK}.first 
-sum_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::SUM}.first 
-maximum_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type = FeedpageHealthMetric::MetricType::MAXIMUM}.first 
+last_week_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type == FeedpageHealthMetric::MetricType::LASTWEEK}.first 
+sum_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type == FeedpageHealthMetric::MetricType::SUM}.first 
+maximum_health = @feedpage.feedpage_health_metrics.find_all{|m| m.metric_type == FeedpageHealthMetric::MetricType::MAXIMUM}.first 
 %>
 Last Week Metrics:
   Titles Crawled  : <%= last_week_health.title_count %>
