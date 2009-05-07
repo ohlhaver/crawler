@@ -9,6 +9,7 @@ require 'feed_tools'
 require 'hpricot'
 require 'rubygems/open-uri'
 require 'iconv' 
+require 'authors_api'
 
 
 
@@ -287,6 +288,8 @@ end
             a= read_taz doc
       end
       
+       a = a.to_a
+       a[0] = AuthorsApi.sanitize_author_name(a[0])
   
       return a
   end

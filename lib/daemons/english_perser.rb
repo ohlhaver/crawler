@@ -9,7 +9,7 @@ require 'feed_tools'
 require 'hpricot'
 require 'rubygems/open-uri'
 require 'iconv'
-
+require 'authors_api'
 
 $running = true;
 $timeout_in_seconds = 4
@@ -210,7 +210,9 @@ end
          a= read_cfr doc
        end
 
-
+       ## sanitize Author name
+       a = a.to_a
+       a[0] = AuthorsApi.sanitize_author_name(a[0])
        return a
    end
 

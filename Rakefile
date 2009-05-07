@@ -8,3 +8,4 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
+#Dir["lib/tasks/*.rake"].sort.each { |ext| load ext }
