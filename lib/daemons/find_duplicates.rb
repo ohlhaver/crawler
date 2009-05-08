@@ -139,9 +139,29 @@ def find_duplicates
      end
      
      # Save the duplicate group id
-     s_ids = story_group.collect{|s| s.id}*","
-     RawstoryDetail.update_all("duplicate_group_id = #{d_g_id}", "rawstory_id IN ( #{s_ids} )")
+     s_ids = story_group.collect{|s| s.id}
+     lead_story = find_lead(story_group)
+     RawstoryDetail.update_all(["duplicate_group_id = #{d_g_id}, is_duplicate = (CASE WHEN #{lead_story.id}  THEN :false ELSE :true END)", {:false => false, :true => true}], 
+                               "rawstory_id IN ( #{s_ids*','} )")
+     
   end
+end
+
+def find_lead(groups)
+  sorted_group  = groups.sort_by{|s| s.created_at}.reverse
+  lead_not_found    = true
+  i                 = 0
+  lead_story        = nil
+  while lead_not_found and i < sorted_group.size
+    if sorted_group[i].author.name.blank?
+      i += 1
+    else
+      lead_story = sorted_group[i]
+      break
+    end
+  end
+  lead_story = sorted_group.first if lead_story.nil?
+  return lead_story
 end
 
 while($running) do
