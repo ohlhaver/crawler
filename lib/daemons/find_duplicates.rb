@@ -141,7 +141,7 @@ def find_duplicates
      # Save the duplicate group id
      s_ids = story_group.collect{|s| s.id}*","
      lead_story = find_lead(story_group)
-     RawstoryDetail.update_all(["duplicate_group_id = #{d_g_id}, is_duplicate = (CASE WHEN #{lead_story.id}  THEN :false ELSE :true END)", {:false => false, :true => true}], 
+     RawstoryDetail.update_all(["duplicate_group_id = #{d_g_id}, is_duplicate = (CASE rawstory_id WHEN #{lead_story.id}  THEN :false ELSE :true END)", {:false => false, :true => true}], 
                                "rawstory_id IN ( #{s_ids} )")
      Rawstory.update_all(["updated_at = :time ",{ :time => Time.now}], "id IN ( #{s_ids} )")
      
