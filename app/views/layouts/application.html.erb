@@ -21,7 +21,8 @@
 	<ul id="navigation">
 		<%= link_to 'home', rawstories_path %> <%= ' - '%>
 		<%= link_to 'sources', sources_path %><%= ' - '%>
-		<%= link_to 'add feedpage', :controller => 'feedpages', :action => 'new' %>
+		<%= link_to 'add feedpage', :controller => 'feedpages', :action => 'new' %><%= ' - '%>
+		<%= link_to 'Author Suggestions', :controller => 'authors', :action => 'show_suggestions' %>
     </ul>
 
 <ul>

@@ -1,0 +1,36 @@
+Total Pending Suggestion = <%= @map_hash.length %>
+ <% form_tag({:controller => 'authors',:action => 'approve_suggestions',}) do%>
+
+<table width=60% border=1>
+<tr>
+<td align=center width=30%> Category </td>
+<td align=center width=70%>
+  <table width=100%><tr>
+   <td width=30% align=center> Author </td>
+   <td width=30% align=center> ID </td>
+   <td width=40% align=center> Belongs To </td>
+  </tr></table>
+</td>
+</tr>
+<% @map_hash_first_20.each{|unique_author,map_array| %>
+<tr>
+<td> <%= unique_author.name %> </td>
+<td align=center width=70%>
+  <table width=100% >
+   <%map_array.each{|map| %>
+   <tr>
+   <td width=30% align=center> <%= map.author.name %> </td>
+   <td width=30% align=center> <%= map.author.id %> </td>
+   <td width=40% align=center> 
+     <%= radio_button :auth_map,  map.id.to_s, "true",:checked => "checked" %>True &nbsp; &nbsp; 
+     <%= radio_button :auth_map,  map.id.to_s, "false" %>False 
+	</td>
+    </tr>
+    <% } %>
+  </table>
+</td>
+</tr>
+<% } %>
+</table>
+<p> <input type="submit" value="Approve"> </p>
+<% end %>
