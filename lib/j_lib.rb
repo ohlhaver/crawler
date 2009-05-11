@@ -1,5 +1,9 @@
 class JLib
   class << self
+    def find_haufen_keywords(haufen_stories)
+      find_haufen_keywords4(haufen_stories)
+    end
+
     def find_haufen_keywords1(haufen_stories)
       keyword_hashes = haufen_stories.collect{|s| s.all_keywords(true, true).last}
       new_hash    = Hash.new(0)

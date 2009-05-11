@@ -4,6 +4,7 @@
 #ENV["RAILS_ENV"] ||= "production"
 
 require File.dirname(__FILE__) + "/../../config/environment"
+require File.dirname(__FILE__) + "/../j_lib.rb"
 #include ExceptionNotifiable
 $running = true;
 Signal.trap("TERM") do 
@@ -224,9 +225,10 @@ def build_haufens
       story.haufen_id = haufen.id
       story.save
     end
-    videos         = group_stories.find_all {|u| u.video == true }
-    haufen.videos  = videos.size
-    haufen.members = members
+    videos          = group_stories.find_all {|u| u.video == true }
+    haufen.videos   = videos.size
+    haufen.members  = members
+    haufen.keywords = JLib.find_haufen_keywords(group_stories)
     haufen.save
   end
   finishing_time = Time.new
