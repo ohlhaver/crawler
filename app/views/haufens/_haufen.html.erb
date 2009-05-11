@@ -1,17 +1,24 @@
-<% div_for(@haufens) do %>
-Id:  <%= haufen.id %> 
-Weight:  <%= haufen.weight %>
-Broadness:  <%= haufen.broadness %>
-
-Pilot: <%= haufen.pilot %>
-Topic: <%= haufen.topic %>
-Top-headline. <%= render :partial => Rawstory.find(haufen.latest) %>
-<% @haufen_stories =[] %>
-<% member_array = haufen.members.split(/\ /) %>
-<% member_array.each do |member| %>
-<% @haufen_stories += Rawstory.find(member).to_a %>
+<% div_for(haufen) do %>
+  Id:  <%= link_to haufen.id, {:controller => 'haufens', :action => 'show', :id => haufen.id } %> 
+  Weight:  <%= haufen.weight %>
+  Broadness:  <%= haufen.broadness %>
+  
+  Pilot: <%= haufen.pilot %>
+  Topic: <%= haufen.topic %>
+  Top-headline. <%= Rawstory.find(haufen.latest).title %>
+  <br/>
+  <% if defined?(show_keywords) and show_keywords == true %>
+  <b>Keywords :</b>
+  <% stories = defined?(rawstories) ? rawstories : haufen.rawstories -%>
+  <i>Algo1:</i> (<%= JLib.find_haufen_keywords1(stories).first(3)*" " -%>)
+  <i>Algo2:</i> (<%= JLib.find_haufen_keywords2(stories).first(3)*" " -%>)
+  <i>Algo3:</i> (<%= JLib.find_haufen_keywords3(stories).first(3)*" " -%>)
+  <i>Algo4:</i> (<%= JLib.find_haufen_keywords4(stories).first(3)*" " -%>)
+  <% end -%>
 <% end %>
+<% if defined?(show_stories) and show_stories == true %>
+  <%  stories = defined?(rawstories) ? rawstories : haufen.rawstories -%>
+  <%= render :partial => stories %>
+<br>
 <% end %>
-<%= render :partial => @haufen_stories %>
-
-<br><br>
+<br>
