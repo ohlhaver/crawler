@@ -24,11 +24,12 @@ class AuthorsApi
     def generate_initial_author_group_suggestions
       last_name_groups = {}
       all_pending_authors = Author.find(:all, :conditions => ["approval_status=?",JConst::AuthorStatus::SUGGESTION_PENDING])
+ 
       if all_pending_authors.length == 0
          puts "No new authors found "
          return 0
       end
-
+     
       puts "Fetching all authors from db complete "
       all_pending_authors.each{|author|
         temp = author.name.split(" ")[-1] 
@@ -59,23 +60,30 @@ class AuthorsApi
          if(val.length > 1) 
            #puts "Category : " + key
            uniq_auth = UniqueAuthor.new({:name => val[0].name,:opinionated => val[0].opinionated})
-           uniq_auth.save
+           uniq_auth.save!
            val.each{|author|
               #puts "   " + author.name
               auth_map = AuthorMap.new({:author_id => author.id, :unique_author_id => uniq_auth.id, :status => JConst::AuthorMapStatus::UNAPPROVED})
-              auth_map.save
-              author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING
-              author.save
+              auth_map.save!
            } 
            @count_levenshtein_groups = @count_levenshtein_groups + 1 
          else
            uniq_auth = UniqueAuthor.new({:name => val[0].name,:opinionated => val[0].opinionated})
-           uniq_auth.save
+           uniq_auth.save!
 		   auth_map = AuthorMap.new({:author_id => val[0].id, :unique_author_id => uniq_auth.id, :status => JConst::AuthorMapStatus::APPROVED})
-           auth_map.save
+           auth_map.save!
            val[0].approval_status = JConst::AuthorStatus::APPROVED
-           val[0].save
+           #val[0].save!
          end
+      }
+
+      puts all_pending_authors.length 
+      all_pending_authors.each{|author|
+		  if author.approval_status == JConst::AuthorStatus::SUGGESTION_PENDING
+		    author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING 
+            @count1 = @count1 + 1
+          end
+		  author.save
       }
       puts "Database updated. " + @count_levenshtein_groups.to_s + " new suggestions generated"
       return 0
