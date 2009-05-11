@@ -1,0 +1,3 @@
+<% @haufens.each do |haufen| -%>
+<%= render :partial => haufen, :locals => {:rawstories => @rawstories_hashed[haufen.id].to_a, :show_keywords => true } -%>
+<% end -%>

@@ -959,14 +959,14 @@ end
                         author = author.gsub('Ã','ß')
                         author = author.gsub('ß¶','ö')
 
-                        keywords = de_find_keywords title, text 
-
-                        if Author.find_by_name(author) == nil
-                            @author = Author.new(:name => author)
-                            @author.save
-                        else
-                            @author = Author.find_by_name(author)
-                        end        
+                       keywords = de_find_keywords title, text 
+                       quality = page.quality
+                       @author = Author.find_by_name(author, :include => [:subscriptions])
+                       if @author.nil?
+                           @author = Author.create!(:name => author)
+                       else
+                           quality = 4 if @author.subscriptions.size > 5
+                       end        
 
                         opinionated = 1 if page.opinionated == 1
                         opinionated = 1 if @author.opinionated == 1  
@@ -994,7 +994,7 @@ end
                        # Save quality and subscription details
                        RawstoryDetail.create!(:rawstory_id => @story.id, 
                                               :subscription_type => page.subscription_type,
-                                              :quality => page.quality)
+                                              :quality => quality)
 
                     #end
                     rescue Timeout::Error => e
