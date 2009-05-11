@@ -3,9 +3,9 @@
   Weight:  <%= haufen.weight %>
   Broadness:  <%= haufen.broadness %>
   
-  Pilot: <%= haufen.pilot %>
+  Pilot: <%= link_to haufen.pilot, {:controller => 'rawstories', :action => 'show', :id => haufen.pilot}  if haufen.pilot %>
   Topic: <%= haufen.topic %>
-  Top-headline. <%= Rawstory.find(haufen.latest).title %>
+  Top-headline. <%= link_to Rawstory.find(haufen.latest).title, {:controller => 'rawstories', :action => 'show', :id => haufen.latest} if haufen.latest %>
   <br/>
   <% if defined?(show_keywords) and show_keywords == true %>
   <b>Keywords :</b>
