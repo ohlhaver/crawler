@@ -81,7 +81,6 @@ class AuthorsApi
       all_pending_authors.each{|author|
 		  if author.approval_status == JConst::AuthorStatus::SUGGESTION_PENDING
 		    author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING 
-            @count1 = @count1 + 1
           end
 		  author.save
       }
