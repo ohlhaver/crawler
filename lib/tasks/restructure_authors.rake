@@ -27,10 +27,19 @@ namespace :db do
     }
   end
 
-  desc "For all Authors with pending_approval, create unapproved grouping suggestions for them"
+  desc "For all Authors with pending_approval, create unapproved grouping suggestions for them. This task generates initial author grouping."
   task :create_author_group_suggestions do 
     require(File.join(RAILS_ROOT, 'config', 'environment'))
     require 'authors_api'
-    AuthorsApi.generate_author_group_suggestions
+    AuthorsApi.generate_initial_author_group_suggestions
+    puts "Done"
   end 
+
+  desc "For all Authors with pending_approval, create unapproved grouping suggestions for them. This task generates incremental author grouping suggestions"
+  task :create_author_group_suggestions do 
+    require(File.join(RAILS_ROOT, 'config', 'environment'))
+    require 'authors_api'
+    AuthorsApi.generate_incremental_author_group_suggestions
+  end 
+
 end
