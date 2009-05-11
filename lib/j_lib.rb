@@ -1,7 +1,7 @@
 class JLib
   class << self
     def find_haufen_keywords1(haufen_stories)
-      keyword_hashes = haufen_stories.collect{|s| s.all_keywords(true).last}
+      keyword_hashes = haufen_stories.collect{|s| s.all_keywords(true, true).last}
       new_hash    = Hash.new(0)
       keyword_hashes.each do |kh|
         kh.keys.each do |k|
@@ -36,7 +36,7 @@ class JLib
       new_hash       = Hash.new(0)
       new_hash1      = Hash.new(0)
       haufen_stories.each do |s|
-        hash1 = s.all_keywords(true).last
+        hash1 = s.all_keywords(true, true).last
         hash1.keys.each do |k|
           new_hash[k] +=  hash1[k].to_i
           new_hash1[k] +=  1
