@@ -21,9 +21,14 @@ class AuthorsApi
       #with_new_line = without_numbers + "\n" 
     end
     
-    def generate_author_group_suggestions
+    def generate_initial_author_group_suggestions
       last_name_groups = {}
       all_pending_authors = Author.find(:all, :conditions => ["approval_status=?",JConst::AuthorStatus::SUGGESTION_PENDING])
+      if all_pending_authors.length == 0
+         puts "No new authors found "
+         return 0
+      end
+
       puts "Fetching all authors from db complete "
       all_pending_authors.each{|author|
         temp = author.name.split(" ")[-1] 
@@ -60,6 +65,7 @@ class AuthorsApi
               auth_map = AuthorMap.new({:author_id => author.id, :unique_author_id => uniq_auth.id, :status => JConst::AuthorMapStatus::UNAPPROVED})
               auth_map.save
               author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING
+              author.save
            } 
            @count_levenshtein_groups = @count_levenshtein_groups + 1 
          else
@@ -68,10 +74,32 @@ class AuthorsApi
 		   auth_map = AuthorMap.new({:author_id => val[0].id, :unique_author_id => uniq_auth.id, :status => JConst::AuthorMapStatus::APPROVED})
            auth_map.save
            val[0].approval_status = JConst::AuthorStatus::APPROVED
+           val[0].save
          end
       }
       puts "Database updated. " + @count_levenshtein_groups.to_s + " new suggestions generated"
       return 0
+    end
+
+    def generate_incremental_author_group_suggestions
+      all_pending_authors = Author.find(:all, :conditions => ["approval_status=?",JConst::AuthorStatus::SUGGESTION_PENDING])
+      all_unique_authors = UniqueAuthor.find(:all)
+      if all_pending_authors.length == 0
+         puts "No new authors found "
+         return 0
+      end
+      recommendations = {}
+      all_pending_authors.each{|author|
+         all_unique_authors.each{|unique_author|
+            if get_dissimilarity(author.name,unique_author.name) < @@dissimilarity_threshold
+              author_map = AuthorMap.new({:author_id => author.id, :unique_author_id => unique_author.id, :status => JConst::AuthorMapStatus::UNAPPROVED })
+              author_map.save
+            end
+         }
+         author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING
+         author.save
+      }
+      
     end
     
     private
