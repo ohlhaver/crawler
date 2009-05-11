@@ -1,7 +1,7 @@
 class JLib
   class << self
     def find_haufen_keywords(haufen_stories)
-      find_haufen_keywords4(haufen_stories)
+      find_haufen_keywords4(haufen_stories).first(3)
     end
 
     def find_haufen_keywords1(haufen_stories)
