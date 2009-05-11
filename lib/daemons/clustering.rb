@@ -228,7 +228,7 @@ def build_haufens
     videos          = group_stories.find_all {|u| u.video == true }
     haufen.videos   = videos.size
     haufen.members  = members
-    haufen.keywords = JLib.find_haufen_keywords(group_stories)
+    haufen.keywords = JLib.find_haufen_keywords(group_stories)*' '
     haufen.save
   end
   finishing_time = Time.new
