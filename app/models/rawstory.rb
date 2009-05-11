@@ -24,7 +24,7 @@ class Rawstory < ActiveRecord::Base
                    'can',
                    'do','does', 
                    'for','from','got', 
-                   'has','have','he','her','him',
+                   'has','have','he','her','him','his',
                    'if','ii','in','into','is','it','its',
                    'no','not','now',
                    'of','off','on','out','over', 
@@ -36,8 +36,9 @@ class Rawstory < ActiveRecord::Base
       raw_keywords = raw_text.split(/\s+/)
       raw_keywords = raw_keywords.first(40) if from_first_forty
       raw_keywords.reject! do |kw|
-        ignore_kw.include?(kw.downcase)
+        kw.match(/[A-Z]/).nil? or  ignore_kw.include?(kw.downcase)
       end
+      raw_keywords.collect!{|k| k.downcase}
       count_hashed = raw_keywords.inject(Hash.new(0)) {|h,x| h[x]+=1;h}
       sorted_keys  = count_hashed.keys.sort_by{|k| - count_hashed[k]}
       if return_counts 
@@ -48,11 +49,13 @@ class Rawstory < ActiveRecord::Base
     end
     def find_de_keywords(text, return_counts = false, from_first_forty = false)
       raw_text = text.gsub(/,|\.|“|”|;|:|\?|- |_|\s+|\\|\"|\(|\)/, ' ')
+      ignore_kw = ['der', 'die', 'das','ein', 'am', 'wie', 'was', 'warum', 'wer', 'wo', 'wann', 'als', 'in']
       raw_keywords = raw_text.split(/\s+/)
       raw_keywords = raw_keywords.first(40) if from_first_forty
       raw_keywords.reject! do |kw|
-        kw.match(/[A-Z]/).nil?
+        kw.match(/[A-Z]/).nil? or  ignore_kw.include?(kw.downcase)
       end
+
       count_hashed = raw_keywords.inject(Hash.new(0)) {|h,x| h[x]+=1;h}
       sorted_keys  = count_hashed.keys.sort_by{|k| - count_hashed[k]}
       if return_counts 
