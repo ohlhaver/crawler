@@ -1,0 +1,46 @@
+Total Pending Suggestion = <%= @all_approval_pending_authors.length %>
+ <% form_tag({:controller => 'authors',:action => 'approve_incremental_suggestions',}) do%>
+
+<table width=60% border=1>
+<tr>
+<td align=center width=30%> Author </td>
+<td align=center width=70%>
+  <table width=100%><tr>
+   <td width=30% align=center> Category </td>
+   <td width=30% align=center> ID </td>
+   <td width=40% align=center> Belongs To </td>
+  </tr></table>
+</td>
+</tr>
+<% @all_approval_pending_authors_first_20.each{|author| %>
+<tr>
+<td> <%= author.name %>  &nbsp; &nbsp;&nbsp; <%= author.id %></td>
+<td align=center width=70%>
+  <table width=100% >
+  <% unless author.author_map.nil? %>
+   <tr>
+   <td width=30% align=center> <%= author.author_map.unique_author.name %> </td>
+   <td width=30% align=center> <%= author.author_map.unique_author.id %> </td>
+   <td width=40% align=center> 
+     <%= radio_button :auth_map,  author.id.to_s, author.author_map.id.to_s,:checked => "checked"  %>True  
+	</td>
+    </tr>
+   <% end %>
+   <tr>
+   <td width=30% align=center> New </td>
+   <td width=30% align=center> --- </td>
+   <td width=40% align=center> 
+  <% unless author.author_map.nil? %>
+     <%= radio_button :auth_map,  author.id.to_s, "new"%>True
+  <% else %>
+     <%= radio_button :auth_map,  author.id.to_s, "new", :checked => "checked"%>True
+  <% end %>
+	</td>
+    </tr>
+  </table>
+</td>
+</tr>
+<% } %>
+</table>
+<p> <input type="submit" value="Approve"> </p>
+<% end %>

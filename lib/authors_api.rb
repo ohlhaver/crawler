@@ -51,6 +51,12 @@ class AuthorsApi
                levenshtein_refined_groups[cat].push(auth)
              }
            }
+        else
+           uniq_auth = UniqueAuthor.new({:name => val[0].name,:opinionated => val[0].opinionated})
+           uniq_auth.save!
+		   auth_map = AuthorMap.new({:author_id => val[0].id, :unique_author_id => uniq_auth.id, :status => JConst::AuthorMapStatus::APPROVED})
+           auth_map.save!
+           val[0].approval_status = JConst::AuthorStatus::APPROVED
         end 
       }
       puts "Levenstein grouping complete : Writing Groups To database"
@@ -65,6 +71,7 @@ class AuthorsApi
               #puts "   " + author.name
               auth_map = AuthorMap.new({:author_id => author.id, :unique_author_id => uniq_auth.id, :status => JConst::AuthorMapStatus::UNAPPROVED})
               auth_map.save!
+              author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING
            } 
            @count_levenshtein_groups = @count_levenshtein_groups + 1 
          else
@@ -78,33 +85,48 @@ class AuthorsApi
       }
 
       puts all_pending_authors.length 
+      @count_unconsidered_authors = 0
       all_pending_authors.each{|author|
 		  if author.approval_status == JConst::AuthorStatus::SUGGESTION_PENDING
-		    author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING 
+		 #   #author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING 
+		    @count_unconsidered_authors = @count_unconsidered_authors + 1 
+            puts author.name
           end
-		  author.save
+		 author.save
       }
       puts "Database updated. " + @count_levenshtein_groups.to_s + " new suggestions generated"
+      puts @count_unconsidered_authors
       return 0
     end
 
     def generate_incremental_author_group_suggestions
-      all_pending_authors = Author.find(:all, :conditions => ["approval_status=?",JConst::AuthorStatus::SUGGESTION_PENDING])
-      all_unique_authors = UniqueAuthor.find(:all)
-      if all_pending_authors.length == 0
-         puts "No new authors found "
+      @all_pending_authors = Author.find(:all, :conditions => ["approval_status=?",JConst::AuthorStatus::SUGGESTION_PENDING], :limit => 10)
+      if @all_pending_authors.length == 0
+         puts "No new authors found"
          return 0
       end
+      @all_unique_authors = UniqueAuthor.find(:all)
+      @count = 0
       recommendations = {}
-      all_pending_authors.each{|author|
-         all_unique_authors.each{|unique_author|
+      @all_pending_authors.each{|author|
+         @all_unique_authors.each{|unique_author|
             if get_dissimilarity(author.name,unique_author.name) < @@dissimilarity_threshold
               author_map = AuthorMap.new({:author_id => author.id, :unique_author_id => unique_author.id, :status => JConst::AuthorMapStatus::UNAPPROVED })
               author_map.save
+			  author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING
+              @count = @count + 1
             end
          }
-         author.approval_status = JConst::AuthorStatus::APPROVAL_PENDING
-         author.save
+         puts @count
+         if @count == 0 
+			unique_author = UniqueAuthor.new({:name => author.name , :opinionated => author.opinionated})
+            unique_author.save
+            author_map = AuthorMap.new({:author_id => author.id, :unique_author_id => unique_author.id, :status => JConst::AuthorMapStatus::APPROVED})
+            author_map.save
+			author.approval_status = JConst::AuthorStatus::APPROVED
+         end
+		 author.save
+         puts author.name
       }
       
     end
