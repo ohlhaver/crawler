@@ -1,0 +1,35 @@
+<script src="/javascripts/prototype.js"></script>
+<h3>Search and Map authors</h3>
+<div style="float:left;width:500px;overflow:auto;">
+  <% form_remote_tag :url => {:controller => 'authors', :action => 'search_authors'},
+                     :html => {:id => 'authorSearchForm'},
+                     :update => "authors_list",
+                     :before => "Element.show('authors_fetching')",
+                     :complete => "Element.hide('authors_fetching')" do %>
+    <%= text_field_tag 'name'-%>
+    <%= hidden_field_tag 'page', '1'%>
+    <input type="submit" value"" style="display:none;">
+    <input type="button" value="Search authors" onClick="document.getElementById('authorSearchForm')['page'].value='1';document.getElementById('authorSearchForm').onsubmit();"%>
+  <% end %>
+</div>
+<div style="float:left;width:500px;margin-left:10px;overflow:auto;">
+  <% form_remote_tag :url => {:controller => 'authors', :action => 'search_unique_authors'},
+                     :html => {:id => 'uniqueAuthorSearchForm'},
+                     :update => "unique_authors_list",
+                     :before => "Element.show('unique_authors_fetching')",
+                     :complete => "Element.hide('unique_authors_fetching')" do %>
+    <%= text_field_tag 'name'-%>
+    <%= hidden_field_tag 'page', '1'%>
+    <input type="submit" value"" style="display:none;">
+    <input type="button" value="Search authors" onClick="document.getElementById('uniqueAuthorSearchForm')['page'].value='1';document.getElementById('uniqueAuthorSearchForm').onsubmit();"%>
+  <% end %>
+</div>
+<div style="clear:both;"></div><br/>
+<div id="authors" style="float:left;width:500px;overflow:auto;">
+  <div id="authors_fetching" style="display:none;">Fetching results</div>
+  <div id="authors_list">&nbsp;</div>
+</div>
+<div id="unique_authors" style="float:left;width:500px;margin-left:10px;overflow:auto;">
+  <div id="unique_authors_fetching" style="display:none;"> Fetching results</div>
+  <div id="unique_authors_list">&nbsp;</div>
+</div>

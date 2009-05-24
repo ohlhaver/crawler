@@ -1,0 +1,18 @@
+<div>
+<% if @authors.blank? %>
+  No results found for ' <%= params[:name]%>'
+<% else %>
+  <% @authors.each do |a| %>
+  <div><%= a.name %></div>
+  <% end %>
+  <div>
+   <%(1..@search.page_count).each do |p|%>
+     <% if p == params[:page] %>
+       <span><%= p %>&nbsp;</span>
+     <% else %>
+       <span><a href="#" onClick="document.getElementById('authorSearchForm')['page'].value=<%= p %>;document.getElementById('authorSearchForm').onsubmit();return false;" ><%= p %></a>&nbsp;</span>
+     <% end %>
+   <% end %>
+  </div>
+<% end %>
+</div>
