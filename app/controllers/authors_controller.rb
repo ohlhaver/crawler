@@ -1,6 +1,29 @@
 class AuthorsController < ApplicationController
   
  before_filter :login_required
+  def map_authors
+  end
+  def search_authors
+    puts params.inspect
+    params[:page] = params[:page].blank? ? 1 : params[:page].to_i
+    params[:per_page] = params[:per_page].blank? ? 20 : params[:per_page].to_i
+    search_hash =  {:query       => params[:name],
+                    :class_names => 'Author',
+                    :page        => params[:page],
+                    :per_page    => params[:per_page]}
+    @search = Ultrasphinx::Search.new(search_hash)
+    @authors = @search.results
+  end
+  def search_unique_authors
+    params[:page] = params[:page].blank? ? 1 : params[:page].to_i
+    params[:per_page] = params[:per_page].blank? ? 20 : params[:per_page].to_i
+    search_hash =  {:query       => params[:name],
+                    :class_names => 'UniqueAuthor',
+                    :page        => params[:page],
+                    :per_page    => params[:per_page]}
+    @search = Ultrasphinx::Search.new(search_hash)
+    @authors = @search.results
+  end
   
   def index
     @authors = Author.find(:all, :order => 'authors.name ASC')
