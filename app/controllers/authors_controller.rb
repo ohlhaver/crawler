@@ -56,6 +56,40 @@ class AuthorsController < ApplicationController
     redirect_to :action => 'index'
   end
 
+  def manual_suggestions
+    unless (params[:auth].nil? || params[:unique_auth].nil?)
+      arr = []
+      params[:auth].each{|key,val| arr.push(val)}
+      if arr.uniq.length >= 1
+        puts params[:auth].inspect
+        puts params[:unique_auth].inspect
+        unique_author = UniqueAuthor.find_by_id(params[:unique_auth]["name"])
+        author_array = []
+        params[:auth].each{|key,val|
+          author_array.push(Author.find_by_id(key)) if val == "1" 
+        }
+        puts author_array.inspect
+        author_array.each{|author,val|
+           #map = AuthorMap.find_by_sql("select * from author_maps where author_id=#{author.id} and unique_author_id=#{unique_author_id}")
+           map = AuthorMap.find_by_author_id(author.id)
+           puts map.inspect 
+           unless map.nil?
+             map.unique_author_id ==  unique_author.id
+             map.status = JConst::AuthorMapStatus::APPROVED
+           else
+             map = AuthorMap.new({:author_id => author.id, :unique_author_id => unique_author.id, :status => JConst::AuthorMapStatus::APPROVED})
+           end
+           author.approval_status = JConst::AuthorStatus::APPROVED
+           author.save
+           map.save
+        }
+      end
+    end
+    redirect_to :action => :map_authors
+  end
+
+
+
   def show_suggestions
    @hello = "" 
    @map_hash = {}

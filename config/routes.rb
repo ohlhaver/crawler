@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sources
   map.resources :feedpages
   map.resources :rawstories, :collection => {:create => :get, :opinions => :get, :search => :get, :sort_by_time => :get}
-  map.resources :authors, :collection => {:show_suggestions => :get, :approve_suggestions => :post, :map_authors => :get, :search_authors => :post, :search_unique_authors => :post} 
+  map.resources :authors, :collection => {:show_suggestions => :get, :approve_suggestions => :post, :map_authors => :get, :manual_suggestions => :post, :search_authors => :post, :search_unique_authors => :post} 
   map.resources :groups
   
   map.connect ':controller/:action/:id'
