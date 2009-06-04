@@ -3,7 +3,7 @@
   No results found for ' <%= params[:name]%>'
 <% else %>
   <% @authors.each do |a| %>
-  <div><%= a.name %></div>
+  <div><%= check_box :auth,  a.id.to_s %> &nbsp;&nbsp;&nbsp; <%= a.name %>, <%=a.id%></div>
   <% end %>
   <div>
    <%(1..@search.page_count).each do |p|%>

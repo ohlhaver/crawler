@@ -9,7 +9,7 @@
     <%= text_field_tag 'name'-%>
     <%= hidden_field_tag 'page', '1'%>
     <input type="submit" value"" style="display:none;">
-    <input type="button" value="Search authors" onClick="document.getElementById('authorSearchForm')['page'].value='1';document.getElementById('authorSearchForm').onsubmit();"%>
+    <input type="button" value="Search Authors" onClick="document.getElementById('authorSearchForm')['page'].value='1';document.getElementById('authorSearchForm').onsubmit();"%>
   <% end %>
 </div>
 <div style="float:left;width:500px;margin-left:10px;overflow:auto;">
@@ -21,10 +21,11 @@
     <%= text_field_tag 'name'-%>
     <%= hidden_field_tag 'page', '1'%>
     <input type="submit" value"" style="display:none;">
-    <input type="button" value="Search authors" onClick="document.getElementById('uniqueAuthorSearchForm')['page'].value='1';document.getElementById('uniqueAuthorSearchForm').onsubmit();"%>
+    <input type="button" value="Search Unique Authors" onClick="document.getElementById('uniqueAuthorSearchForm')['page'].value='1';document.getElementById('uniqueAuthorSearchForm').onsubmit();"%>
   <% end %>
 </div>
 <div style="clear:both;"></div><br/>
+<% form_tag({:controller => 'authors',:action => 'manual_suggestions',}) do%>
 <div id="authors" style="float:left;width:500px;overflow:auto;">
   <div id="authors_fetching" style="display:none;">Fetching results</div>
   <div id="authors_list">&nbsp;</div>
@@ -33,3 +34,7 @@
   <div id="unique_authors_fetching" style="display:none;"> Fetching results</div>
   <div id="unique_authors_list">&nbsp;</div>
 </div>
+
+<div style="clear:both;"></div><br/>
+<p> <input type="submit" value="group"> </p>
+<% end %>
