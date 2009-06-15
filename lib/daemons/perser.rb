@@ -10,6 +10,7 @@ require 'hpricot'
 require 'rubygems/open-uri'
 require 'iconv' 
 require 'authors_api'
+require 'fix_urls'
 
 
 
@@ -357,6 +358,10 @@ end
          end
          end
 
+     image_url = nil
+     d         = (doc/"#spArticleBody div.spArticleImageBox img")
+     image_url = d.first.attributes['src'] unless d.blank?
+
          doc = (doc/"#spArticleBody/p")
          
          (doc/"div.spAsset").remove
@@ -536,10 +541,15 @@ end
      author = author_array.first.sub('Von ', '') unless author_array.first == nil 
      author = author.chop
 
+     image_url = nil
+     d         = (doc/"#content div.image_full img")
+     image_url = d.first.attributes['src'] unless d.blank?
+
      doc = (doc/"div.articlebody/p")
      text = doc.inner_text
 
-     return author, text ,title
+
+     return author, text ,title, nil, image_url
   end
 
   def read_nzz doc
@@ -605,9 +615,14 @@ end
      author = nil if author == 'Uta Keseling'
      author = nil if author == 'Gnadenlos'
      author = nil if author == 'Mojib Latif'
+
+     image_url = nil
+     d         = (doc/"#contentContainer div.articleBox img")
+     image_url = d.first.attributes['src'] unless d.blank?
+
      doc = (doc/"div.articleBox/p")  
      text = doc.inner_text
-       return author, text
+       return author, text, nil, nil, image_url
   end
   
   def read_ftd doc
@@ -942,11 +957,16 @@ end
                   #  if (Rawstory.find_by_title(item.title) == nil) && (Rawstory.find_by_link(item.link) == nil)
                         @story = Rawstory.create(:link => item.link)
                     
-                        author, text, title, opinionated = read_page page.source.name, item.link
+                        author, text, title, opinionated, image_url = read_page page.source.name, item.link
                         title = item.title if title == nil
                         author = '' if author == nil
                         text = text + ' ' + author
-                        
+                        unless image_url.blank?
+                          image_url = FixUrls.get_absolute_url(image_url, item.link)
+                          si = StoryImage.create!(:baseurl => image_url)
+                          RawstoriesStoryImage.create!(:rawstory_id => @story.id, :story_image_id => si.id)
+                        end
+ 
                         title = title.gsub('Ã¼','ü')
                         title = title.gsub('Ã¤','ä')
                         title = title.gsub(' Ã',' Ä')     

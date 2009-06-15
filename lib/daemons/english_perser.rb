@@ -10,6 +10,7 @@ require 'hpricot'
 require 'rubygems/open-uri'
 require 'iconv'
 require 'authors_api'
+require 'fix_urls'
 
 $running = true;
 $timeout_in_seconds = 4
@@ -506,7 +507,11 @@ end
        text = text.sub('(Reuters)','')
        text = text.sub('Quote, Profile, Research, Stock Buzz','')
 
-       return author, text
+       image_url = nil
+       d         = (doc/"#articlePhoto img")
+       image_url = d.first.attributes['src'] unless d.blank?
+
+       return author, text, nil,nil, image_url
    end
 
    def read_nytimes doc
@@ -555,10 +560,14 @@ end
        document = (doc/"div.entry-content/p") 
        document = (doc/"#articleBody/nyt_text/p") if document.size < 1 #if document == nil or document == '' 
        text = document.inner_text
+       author = '' if author == 'Reuters '
 
+       image_url = nil
+       d         = (doc/"#article #wideImage img")
+       d         = (doc/"#articleInline .image img") if d.blank?
+       image_url = d.first.attributes['src'] unless d.blank?
      #  text = intro + ' ' + text
-      author = '' if author == 'Reuters '
-       return author, text
+       return author, text, nil,nil, image_url
    end
 
    def read_ft doc
@@ -732,7 +741,12 @@ end
      #  text = text.sub(trash,'')
       # intro = (doc/"div.storysubhead").inner_text 
      #  text = intro + ' ' + text
-       return author, text
+
+       image_url = nil
+       d         = (doc/"#articleThumbnail_1 img")
+       image_url = d.first.attributes['src'] unless d.blank?
+
+       return author, text, nil,nil, image_url
    end
 
    def read_ctribune doc
@@ -2362,6 +2376,7 @@ end
        #  stories_hashed     = stories.group_by{|s| s.feedpage_id} 
        #end
        @feedpages.each do |page| 
+         next     unless page.source.name == 'www.nytimes.com' 
          begin
            last_story_at = nil
            new_stories = 0
@@ -2376,11 +2391,15 @@ end
                        @story = Rawstory.create(:link => item.link)
               
                        
-                       author, text, title, opinionated = read_page page.source.name, item.link
+                       author, text, title, opinionated, image_url = read_page page.source.name, item.link
                        title = item.title if title == nil
                        author = '' if author == nil
                        text = text + ' ' + author
-
+                       unless image_url.blank?
+                         image_url = FixUrls.get_absolute_url(image_url, item.link)
+                         si = StoryImage.create!(:baseurl => image_url)
+                         RawstoriesStoryImage.create!(:rawstory_id => @story.id, :story_image_id => si.id)
+                       end
                        keywords = en_find_keywords title, text 
                        quality = page.quality
                        @author = Author.find_by_name(author, :include => [:subscriptions])

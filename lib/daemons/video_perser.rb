@@ -10,6 +10,7 @@ require 'hpricot'
 require 'rubygems/open-uri'
 require 'iconv'
 require 'authors_api'
+require 'fix_urls'
 
 
 

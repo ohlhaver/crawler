@@ -230,6 +230,32 @@ def build_haufens
     haufen.members  = members
     haufen.keywords = JLib.find_haufen_keywords(group_stories)*' '
     haufen.save
+   
+    # Start : Find the  image for the haufen
+    haufen_stories = stories_hashed[group.id]
+    
+    sorted_stories =  haufen_stories.sort_by{|story|
+       age = ((Time.new - story.created_at)/3600).to_i 
+       age = 1 if age < 1
+       age = (100*(1/(age**(0.33)))).to_i 
+       quality_value = story.rawstory_detail.quality rescue 1
+       blub =  age*quality_value
+       blub
+    }.reverse
+    
+    image_found = false
+    i = 0
+    while !image_found and i < sorted_stories.size
+      s = sorted_stories[i]
+      if s.rawstory_detail.image_exists
+        HaufensStoryImage.create!(:haufen_id => haufen.id, :story_image_id => s.rawstories_story_image.story_image.id)
+        haufen.image_exists = true
+        haufen.save!
+        image_found = true
+      end
+      i += 1
+    end
+    # End : Find the  image for the haufen
   end
   finishing_time = Time.new
   duration = (finishing_time - starting_time)
