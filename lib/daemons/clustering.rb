@@ -173,7 +173,7 @@ def build_groups
     @pilot_story = $current_stories_hashed[g.pilot].to_a[0]
     make_group
   end  
-  Group.delete_all(" gsession_id < #{last_gsession_id}")
+  #Group.delete_all(" gsession_id < #{last_gsession_id}")
   finishing_time = Time.new
   duration       = (finishing_time - starting_time)
   Eintrag.create(:name => 'Group building 2 completed', :duration => duration)
@@ -250,6 +250,7 @@ def build_haufens
       if s.rawstory_detail.image_exists
         HaufensStoryImage.create!(:haufen_id => haufen.id, :story_image_id => s.rawstories_story_image.story_image.id)
         haufen.image_exists = true
+        haufen.image_story_id = s.id
         haufen.save!
         image_found = true
       end

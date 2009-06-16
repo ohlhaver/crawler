@@ -963,7 +963,7 @@ end
                         text = text + ' ' + author
                         unless image_url.blank?
                           image_url = FixUrls.get_absolute_url(image_url, item.link)
-                          si = StoryImage.create!(:baseurl => image_url)
+                          si = StoryImage.create!(:baseurl => image_url, :source_id => page.source_id)
                           RawstoriesStoryImage.create!(:rawstory_id => @story.id, :story_image_id => si.id)
                         end
  

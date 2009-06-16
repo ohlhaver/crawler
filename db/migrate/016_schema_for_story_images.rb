@@ -2,6 +2,7 @@ class SchemaForStoryImages < ActiveRecord::Migration
   def self.up
     add_column :rawstory_details, :image_exists, :boolean, :null => false, :default => false
     add_column :haufens, :image_exists, :boolean, :null => false, :default => false
+    add_column :haufens, :image_story_id, :integer, :null => false, :default => 0
 
     create_table :story_images do |t|
       t.string  :baseurl, :null => false, :default => ''
