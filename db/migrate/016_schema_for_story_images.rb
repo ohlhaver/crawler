@@ -5,6 +5,7 @@ class SchemaForStoryImages < ActiveRecord::Migration
 
     create_table :story_images do |t|
       t.string  :baseurl, :null => false, :default => ''
+      t.integer :source_id, :null => false, :default => 0
       t.boolean :image_exists, :null => false, :default => false
       t.string  :content_type, :null => false, :default => ''
       t.string  :dimensions, :null => false, :default => ''
