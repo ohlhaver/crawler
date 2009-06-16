@@ -173,7 +173,7 @@ def build_groups
     @pilot_story = $current_stories_hashed[g.pilot].to_a[0]
     make_group
   end  
-  #Group.delete_all(" gsession_id < #{last_gsession_id}")
+  Group.delete_all(" gsession_id < #{last_gsession_id}")
   finishing_time = Time.new
   duration       = (finishing_time - starting_time)
   Eintrag.create(:name => 'Group building 2 completed', :duration => duration)
