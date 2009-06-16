@@ -2376,7 +2376,6 @@ end
        #  stories_hashed     = stories.group_by{|s| s.feedpage_id} 
        #end
        @feedpages.each do |page| 
-         next     unless page.source.name == 'www.nytimes.com' 
          begin
            last_story_at = nil
            new_stories = 0
