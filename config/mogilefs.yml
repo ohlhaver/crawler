@@ -4,4 +4,4 @@ development:
 test:
   hosts: localhost:7001
 production:
-  hosts: localhost:7001
+  hosts: localhost:9521
