@@ -19,7 +19,11 @@ while($running) do
     :conditions => ["created_at > :one_day_ago and image_exists = :false ", {:false => false, :one_day_ago => (Time.now - 1.day)}] 
   )
   images.each do |i|
-    d = open(i.baseurl)
+    begin
+      d = open(i.baseurl)
+    rescue
+      next
+    end
     i.store_image(d.read, d.content_type)
     RawstoriesStoryImage.find(:all, :conditions => ["story_image_id = ?", i.id]).each do |rs|
       s = RawstoryDetail.find_by_rawstory_id(rs.rawstory_id)

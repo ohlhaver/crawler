@@ -374,7 +374,7 @@ end
          text = doc.inner_text
          text = intro + ' ' + text + ' ' + roof
 
-         return author, text, title
+         return author, text, title, nil, image_url
   end
 
 
