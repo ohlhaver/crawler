@@ -13,6 +13,16 @@ end
 $current_stories = [] 
 $current_stories_hashed = {}
 
+def calculate_blub(story, time_now = nil)
+  time_now ||= Time.now
+  age = ((time_now - story.created_at)/3600).to_i 
+  age = 1 if age < 1
+  age = (100*(1/(age**(0.33)))).to_i 
+  quality_value = story.rawstory_detail.quality rescue 1
+  blub =  age*quality_value
+  return blub
+end
+
 def calculate_score story
   pilot_keys =  @pilot_story.keywords.split(/\ /) 
   story_keys =  story.keywords.split(/\ /)
@@ -195,54 +205,34 @@ def build_haufens
     haufen.topic       = group.topic
     haufen.pilot       = group.pilot
     haufen.language    = group.language
-    #haufen.weight = group.weight
     haufen.broadness = (group.broadness * 100) + group.weight
-    #ok_stories = stories_hashed[group.id].find_all {|u| u.hscore > 0 }
-    #if ok_stories.size != 0
-    #  haufen.latest = ok_stories.first.id
-    #  else
     haufen_stories = stories_hashed[group.id]
-    highest_blub   = 0
-    haufen_stories.each_with_index do |story, ind|
-      age = ((Time.new - story.created_at)/3600).to_i 
-      age = 1 if age < 1
-      age = (100*(1/(age**(0.33)))).to_i 
-      quality_value = story.rawstory_detail.quality rescue 1
-      blub =  age*quality_value
-      if ind == 0 or blub > highest_blub
-        haufen.latest = story.id 
-        highest_blub  = blub
-      end   
-    end
+    
+    time_now = Time.new
+    sorted_stories =  haufen_stories.sort_by{|story| - calculate_blub(story, time_now)}
+    haufen.latest        = sorted_stories.first.id
+    haufen.top_story_ids = sorted_stories[0,5].collect{|s| s.id}*","
     
     
-    #end
     group_stories = stories_hashed[group.id]
     haufen.weight = group_stories.size
+
+    videos        = group_stories.find_all {|u| u.video == true }
+    haufen.videos   = videos.size
+
     members = ''
     group_stories.each do |story|
       members += story.id.to_s + ' '  
       story.haufen_id = haufen.id
       story.save
     end
-    videos          = group_stories.find_all {|u| u.video == true }
-    haufen.videos   = videos.size
     haufen.members  = members
     haufen.keywords = JLib.find_haufen_keywords(group_stories)*' '
-    haufen.save
-   
+
+    haufen.save!
+
+
     # Start : Find the  image for the haufen
-    haufen_stories = stories_hashed[group.id]
-    
-    sorted_stories =  haufen_stories.sort_by{|story|
-       age = ((Time.new - story.created_at)/3600).to_i 
-       age = 1 if age < 1
-       age = (100*(1/(age**(0.33)))).to_i 
-       quality_value = story.rawstory_detail.quality rescue 1
-       blub =  age*quality_value
-       blub
-    }.reverse
-    
     image_found = false
     i = 0
     while !image_found and i < sorted_stories.size
