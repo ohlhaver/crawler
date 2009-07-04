@@ -211,7 +211,7 @@ def build_haufens
     time_now = Time.new
     sorted_stories =  haufen_stories.sort_by{|story| - calculate_blub(story, time_now)}
     haufen.latest        = sorted_stories.first.id
-    haufen.top_story_ids = sorted_stories[0,5].collect{|s| s.id}*","
+    haufen.top_story_ids = sorted_stories.find_all{|s| s.rawstory_detail.is_duplicate == false}[0,5].collect{|s| s.id}*","
     
     
     group_stories = stories_hashed[group.id]
