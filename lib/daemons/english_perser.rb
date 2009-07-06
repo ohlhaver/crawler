@@ -201,8 +201,9 @@ end
        end
        
        if page_source_name == 'www.reuters.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_reuters doc
+          doc_url = item_link
+          doc =Hpricot(open(item_link){|f| doc_url = f.base_uri.to_s;f.read})
+          a= read_reuters doc, doc_url
         end
 
      
@@ -468,7 +469,7 @@ end
        return author, text
    end
 
-   def read_reuters doc
+   def read_reuters doc, doc_url=nil
 
        author = (doc/"#resizeableText/p[1]").inner_text
 
@@ -511,7 +512,7 @@ end
        d         = (doc/"#articlePhoto img")
        image_url = d.first.attributes['src'] unless d.blank?
 
-       return author, text, nil,nil, image_url
+       return author, text, nil,nil, image_url,doc_url
    end
 
    def read_nytimes doc
@@ -2390,12 +2391,12 @@ end
                        @story = Rawstory.create(:link => item.link)
               
                        
-                       author, text, title, opinionated, image_url = read_page page.source.name, item.link
+                       author, text, title, opinionated, image_url,doc_url = read_page page.source.name, item.link
                        title = item.title if title == nil
                        author = '' if author == nil
                        text = text + ' ' + author
                        unless image_url.blank?
-                         image_url = FixUrls.get_absolute_url(image_url, item.link)
+                         image_url = FixUrls.get_absolute_url(image_url, (doc_url.to_s||item.link))
                          si = StoryImage.create!(:baseurl => image_url, :source_id => page.source_id)
                          RawstoriesStoryImage.create!(:rawstory_id => @story.id, :story_image_id => si.id)
                        end
