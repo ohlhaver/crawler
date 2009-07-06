@@ -957,12 +957,12 @@ end
                   #  if (Rawstory.find_by_title(item.title) == nil) && (Rawstory.find_by_link(item.link) == nil)
                         @story = Rawstory.create(:link => item.link)
                     
-                        author, text, title, opinionated, image_url = read_page page.source.name, item.link
+                        author, text, title, opinionated, image_url,doc_url = read_page page.source.name, item.link
                         title = item.title if title == nil
                         author = '' if author == nil
                         text = text + ' ' + author
                         unless image_url.blank?
-                          image_url = FixUrls.get_absolute_url(image_url, item.link)
+                          image_url = FixUrls.get_absolute_url(image_url, (doc_url || item.link))
                           si = StoryImage.create!(:baseurl => image_url, :source_id => page.source_id)
                           RawstoriesStoryImage.create!(:rawstory_id => @story.id, :story_image_id => si.id)
                         end
