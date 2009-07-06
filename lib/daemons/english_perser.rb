@@ -202,7 +202,7 @@ end
        
        if page_source_name == 'www.reuters.com' 
           doc_url = item_link
-          doc =Hpricot(open(item_link){|f| doc_url = f.base_uri.to_s;f.read})
+          doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds){|f| doc_url = f.base_uri.to_s;f.read})
           a= read_reuters doc, doc_url
         end
 
