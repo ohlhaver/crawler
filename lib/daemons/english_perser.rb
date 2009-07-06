@@ -2396,7 +2396,7 @@ end
                        author = '' if author == nil
                        text = text + ' ' + author
                        unless image_url.blank?
-                         image_url = FixUrls.get_absolute_url(image_url, (doc_url.to_s||item.link))
+                         image_url = FixUrls.get_absolute_url(image_url, (doc_url||item.link))
                          si = StoryImage.create!(:baseurl => image_url, :source_id => page.source_id)
                          RawstoriesStoryImage.create!(:rawstory_id => @story.id, :story_image_id => si.id)
                        end
