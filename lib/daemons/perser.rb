@@ -24,155 +24,7 @@ end
     
   def read_page page_source_name, item_link
          
-         if page_source_name == 'www.ft.com' 
-            f = open(item_link, :read_timeout => $timeout_in_seconds)
-             f.rewind
-             doc = Hpricot(Iconv.conv('utf-8', f.charset, f.readlines.join("\n")))
-            a= read_ft doc
-         end
 
-
-
-            if page_source_name == 'www.nytimes.com' 
-             doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-              a= read_nytimes doc
-            end
-
-           if page_source_name == 'www.economist.com' 
-              doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-               a= read_economist doc
-           end
-
-             if page_source_name == 'www.latimes.com' 
-               doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                a= read_latimes doc
-             end
-
-              if page_source_name == 'online.wsj.com' 
-                doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                 a= read_wsj doc
-              end
-
-
-               if page_source_name == 'www.chicagotribune.com' 
-                 doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                  a= read_ctribune doc
-               end
-
-                if page_source_name == 'www.slate.com' 
-                  doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                   a= read_slate doc
-                end
-
-           if page_source_name == 'www.salon.com' 
-                     doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                      a= read_salon doc
-           end
-
-                if page_source_name == 'www.newsweek.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_newsweek doc
-                end
-
-                if page_source_name == 'www.time.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_time doc
-                end
-
-                if page_source_name == 'www.nationalreview.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_nreview doc
-                end
-
-                if page_source_name == 'www.tnr.com' 
-                  #does not work yet!
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_tnr doc
-                end
-
-                if page_source_name == 'www.newyorker.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_newyorker doc
-                end
-
-                if page_source_name == 'harpers.org' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_harpers doc
-                end
-
-                if page_source_name == 'www.businessweek.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_businessweek doc
-                end
-
-                if page_source_name == 'www.redherring.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_redherring doc
-                end
-
-                if page_source_name == 'www.guardian.co.uk' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_guardian doc
-                end
-
-                if page_source_name == 'www.independent.co.uk' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_independent doc
-                end
-
-
-
-                if page_source_name == 'timesofindia.indiatimes.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_indiatimes doc
-                end
-
-                if page_source_name == 'economictimes.indiatimes.com' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_economictimes doc
-                end
-
-
-
-                if page_source_name == 'www.theaustralian.news.com.au' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_australian doc
-                end
-
-                if page_source_name == 'www.theage.com.au' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_theage doc
-                end
-
-                if page_source_name == 'www.smh.com.au' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_sidney doc
-                end
-
-
-
-                if page_source_name == 'www.sptimes.ru' 
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_sptimes doc
-                end
-
-                if page_source_name == 'www.moscowtimes.ru' 
-                  item_link = item_link + '&print=Y'
-                       doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                        a= read_moscowtimes doc
-                end
-
-                if page_source_name == 'www.haaretz.com' 
-                  item_link = item_link.sub('spages/', 'objects/pages/PrintArticleEn.jhtml?itemNo=')
-                  item_link = item_link.sub('.html','')
-                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                         a= read_haaretz doc
-                end
-
-                 if page_source_name == 'www.jpost.com' 
-                        doc =Hpricot(open(item_link, :read_timeout => $timeout_in_seconds))
-                         a= read_jpost doc
-                 end
          
          
       if page_source_name == 'www.11freunde.de'
@@ -384,7 +236,7 @@ end
       title = roof_title + ': ' + title if roof_title != ''
       title = title.sub(' ','') if title.first == ' '
       author = (doc/"div.cnArticle/cite").inner_text
-      unless author == nil
+      unless author == nil or author == ''
           author = author.sub('von ', '+')
           author = author.gsub(' und ', '+')
           author = author.gsub(',', '+')
@@ -406,16 +258,21 @@ end
           author = author.gsub('5', 'ö')
 
       end
-
+      
+      image_url = nil
+       d         = (doc/"#content div.imageBox img")  
+      image_url = d.first.attributes['src'] unless d.blank?
+      
       doc = (doc/"div.text")     
       text = doc.inner_text
 
-      return author, text, title
+      return author, text, title, nil, image_url
   end
   
   def read_tagesspiegel doc
      author = (doc/"a.ISI_IGNORE[1]").inner_html
-
+     
+     unless author == nil or author == ''
      if ! author.match('Von')
        author_array = author.scan(/\w+/)
        author = author_array[0] + ' ' + author_array[2]
@@ -439,13 +296,20 @@ end
        text = doc.inner_text
        text =  intro + ' ' + text
      end
-     return author, text
+     end
+     image_url = nil
+      d         = (doc/"#thumbbig.ISI_IGNORE span.ISI_IGNORE img")  
+     image_url = d.first.attributes['src'] unless d.blank?
+     image_url = 'http://www.tagesspiegel.de' + image_url unless image_url == nil
+     image_url = nil if image_url == 'http://www.tagesspiegel.de/pics/icon_lupe.gif'
+     
+     return author, text, nil, nil, image_url
   end
  
   def read_faz doc
        author = (doc/"p.Author/a").inner_html
        author = (doc/"p.Author").inner_html if author == ''
-        unless author == nil
+        unless author == nil or author == ''
             author = author.sub('Von ', '+')
             author = author.gsub(' und ', '+')
             author = author.gsub(',', '+')
@@ -467,70 +331,87 @@ end
             author = author.gsub('5', 'ö')
 
         end
+
+        image_url = nil
+         d         = (doc/"#MainColumn div.ArticleImgLeft img")
+         image_url = d.first.attributes['src'] unless d.blank?
+         if image_url == nil
+           d         = (doc/"#MedContent_quelle div.ArticleImgLarge img") 
+           image_url = d.first.attributes['src'] unless d.blank?
+         end
+
+
+
+         image_url = 'http://www.faz.net' + image_url unless image_url == nil
+
         doc = (doc/"div.Article/p")
         (doc/"span.Italic").remove
         text = doc.inner_text
-        return author, text
+        return author, text, nil, nil, image_url
   end
   
   def read_sueddeutsche doc
 
-      roof_title = (doc/"h2.artikelDachzeile").inner_text
-      #title = (doc/"h1.artikelTitel").inner_text
-      #title = roof_title + ': ' + title
-      author = (doc/"td/p/cite").inner_text
-      unless author.empty?
-          author = author.sub('Eine Analyse von ', '+')
-          author = author.sub('Eine Außenansicht von ', '+')
-          author = author.sub('Ein Audiokommentar von ', '+')
-          author = author.sub('Ein Gastkommentar von ', '+')
-          author = author.sub('Ein Klagelied von ', '+')
-          author = author.sub('Ein Kommentar von ', '+')
-          author = author.sub('Ein Nachruf von ', '+')
-          author = author.sub('Ein Rückblick von ', '+')
-          author = author.sub('Ein Rückblick in Bildern von ', '+')
-          author = author.sub('Ein Überblick von  ', '+')
-          author = author.sub('Eine Glosse von ', '+')
-          author = author.sub('Eine Nachtkritik von ', '+')
-          author = author.sub('Eine Reportage von ', '+')
-          author = author.sub('Interview:  ', '+')
-          author = author.sub('Interview von ', '+')
-          author = author.sub('Eine Reportage von ', '+')
+       roof_title = (doc/"h2.artikelDachzeile").inner_text
+       #title = (doc/"h1.artikelTitel").inner_text
+       #title = roof_title + ': ' + title
+       author = (doc/"td/p/cite").inner_text
+       unless author.empty?
+           author = author.sub('Eine Analyse von ', '+')
+           author = author.sub('Eine Außenansicht von ', '+')
+           author = author.sub('Ein Audiokommentar von ', '+')
+           author = author.sub('Ein Gastkommentar von ', '+')
+           author = author.sub('Ein Klagelied von ', '+')
+           author = author.sub('Ein Kommentar von ', '+')
+           author = author.sub('Ein Nachruf von ', '+')
+           author = author.sub('Ein Rückblick von ', '+')
+           author = author.sub('Ein Rückblick in Bildern von ', '+')
+           author = author.sub('Ein Überblick von  ', '+')
+           author = author.sub('Eine Glosse von ', '+')
+           author = author.sub('Eine Nachtkritik von ', '+')
+           author = author.sub('Eine Reportage von ', '+')
+           author = author.sub('Interview:  ', '+')
+           author = author.sub('Interview von ', '+')
+           author = author.sub('Eine Reportage von ', '+')
 
 
-          author = author.gsub('Von ', '+')
-          author = author.gsub(' und ', '+')
-          author = author.gsub(',', '+')
-          author = author.gsub('-', '2')
-          author = author.gsub('.', '1')
-          author = author.gsub(' ', '0')
-          author = author.gsub('+', ' ')
-          author = author.gsub('ä', '3')
-          author = author.gsub('ü', '4')
-          author = author.gsub('ö', '5')
-          author = author.gsub('á', '6')
-          author_array = author.scan(/\w+/)
-          author = author_array[0]
-          author = author.gsub('0', ' ')
-          author = author.gsub('1', '.')
-          author = author.gsub('2', '-')
-          author = author.gsub('3', 'ä')
-          author = author.gsub('4', 'ü')
-          author = author.gsub('5', 'ö')
-          author = author.gsub('6', 'á')
+           author = author.gsub('Von ', '+')
+           author = author.gsub(' und ', '+')
+           author = author.gsub(',', '+')
+           author = author.gsub('-', '2')
+           author = author.gsub('.', '1')
+           author = author.gsub(' ', '0')
+           author = author.gsub('+', ' ')
+           author = author.gsub('ä', '3')
+           author = author.gsub('ü', '4')
+           author = author.gsub('ö', '5')
+           author = author.gsub('á', '6')
+           author_array = author.scan(/\w+/)
+           author = author_array[0]
+           author = author.gsub('0', ' ')
+           author = author.gsub('1', '.')
+           author = author.gsub('2', '-')
+           author = author.gsub('3', 'ä')
+           author = author.gsub('4', 'ü')
+           author = author.gsub('5', 'ö')
+           author = author.gsub('6', 'á')
 
-      end
-      intro = (doc/"p.artikelTeaser").inner_text
+       end
+       intro = (doc/"p.artikelTeaser").inner_text
 
 
-      text =(doc/"div.main/p").inner_text
-      text =(doc/"p.artikelFliestext").inner_text if text == ''
+       text =(doc/"div.main/p").inner_text
+       text =(doc/"p.artikelFliestext").inner_text if text == ''
 
-      text = intro + ' ' + text
+       text = intro + ' ' + text
 
-      return author, text
+       image_url = nil
+        d         = (doc/"#contentTable.content div.photo img")
+        image_url = d.first.attributes['src'] unless d.blank?
+
+       return author, text, nil, nil, image_url
   end
-  
+   
   def read_zeit doc
      roof_title = (doc/"div.articletext/h3").inner_text
      title = (doc/"div.articletext/h2").inner_text
@@ -585,14 +466,21 @@ end
             author = author.gsub('5', 'ö')
 
           end
+
+          image_url = nil
+          d         = (doc/"#article div.article img")
+          image_url = d.first.attributes['src'] unless d.blank?
+          image_url = 'http://www.nzz.ch' + image_url unless image_url == nil
+          image_url = nil if image_url == 'http://www.nzz.ch/static-images/pixel.gif'
+
       intro = (doc/"div.body/h5").inner_text  
       doc = (doc/"div.body/p")
       text = doc.inner_text
       text = intro + ' ' + text
       title = nil
-      return author, text , title, opinionated
+      return author, text , title, opinionated, image_url
   end
-  
+
   def read_welt doc
       author = (doc/"span.author").inner_text
        unless author == nil
@@ -633,7 +521,7 @@ end
       title = title.sub('Dossier ', '')
       author = (doc/"h4.bot").inner_text
 
-      unless author == nil
+      unless author == nil or author == ''
           author = author.sub('von ', '+') 
           author = author.gsub('und', '+')
           author = author.gsub(',', '+')
@@ -664,19 +552,25 @@ end
   end
 
   def read_derstandard doc
-     author = (doc/"p.Author").inner_html
+      author = (doc/"p.Author").inner_html
 
-    author = (doc/"a[4]/b").inner_text if author == ''
-    author = author.sub('Von ', '') unless author == nil
-      intro = (doc/"#artikelBody/h2")
-      doc = (doc/"#artikelBody/p")
-      text = intro.inner_text + " " + doc.inner_text
-      return author, text
+     author = (doc/"a[4]/b").inner_text if author == ''
+     author = author.sub('Von ', '') unless author == nil
+
+      image_url = nil
+        d         = (doc/"#objectContent.artikel div.artikelLeft img")
+        image_url = d.first.attributes['src'] unless d.blank?
+
+
+       intro = (doc/"#artikelBody/h2")
+       doc = (doc/"#artikelBody/p")
+       text = intro.inner_text + " " + doc.inner_text
+       return author, text, nil, nil, image_url
   end
-
+   
   def read_diepresse doc
-         author = (doc/"p.articletime").inner_html
-         unless author == nil
+       author = (doc/"p.articletime").inner_html
+       unless author == nil or author == ''
          author = author.gsub('|', '+')
          author = author.gsub('(', '+')
          author = author.gsub(' ', '0')
@@ -684,8 +578,8 @@ end
          author_array = author.scan(/\w+/)
          author = author_array[7]
          author = author.gsub('0', ' ')
-         author = nil if author == 'DiePresse'
-         author = nil if author == 'Die Presse'
+         author = '' if author == 'DiePresse'
+         author = '' if author == 'Die Presse'
          author = author.sub('Von unserem Korrespondenten ', '')
          author = author.sub('Von unserer Korrespondentin ', '')
          author = author.sub('Von ', '+')
@@ -698,7 +592,7 @@ end
          author = author.gsub(' ', '0')
          author = author.gsub('+', ' ')
          author_array = author.scan(/\w+/)
-         author = author_array[0]
+         author = author_array[0] if author_array[0] != nil
          author = author.gsub('0', ' ')
          author = author.gsub('1', '.')
          author = author.gsub('2', '-')
@@ -713,13 +607,20 @@ end
            author += word + ' '
          end
        end
+
+       image_url = nil
+       d         = (doc/"#content div.articlecontent a")
+       #/html/body/div[5]/div/div[5]/div[2]/div/div/div/div/a
+       image_url = d.first.attributes['href'] unless d.blank?
+       image_url = 'http://www.diepresse.com' + image_url unless image_url == nil
+
        intro = (doc/"p.articlelead/strong").inner_text  
        doc = (doc/"div.articletext/p")
        text = doc.inner_text
        text = intro + ' ' + text
-       return author, text
+       return author, text, nil, nil, image_url
   end
-
+  
   def read_baz doc
       author = (doc/"#metaLine/h5").inner_text
       unless author == nil
@@ -737,71 +638,85 @@ end
   end
 
   def read_taz doc
-          author = (doc/"span.autor").inner_html
-          intro = (doc/"p.artikelintro").inner_text
-          intro = intro.sub(author, '')
+           author = (doc/"span.autor").inner_html
+           intro = (doc/"p.artikelintro").inner_text
+           intro = intro.sub(author, '')
 
-          unless author == nil
-             author = author.gsub('VON', '+')
-             author = author.gsub('&', '+')
-             author = author.gsub(' ', '0')
-             author = author.gsub('.', '1')
-             author = author.gsub('Ä', '3')
-             author = author.gsub('Ü', '4')
-             author = author.gsub('Ö', '5')
-             author = author.gsub('ä', '3')
-             author = author.gsub('ü', '4')
-             author = author.gsub('ö', '5')
-             author = author.gsub('-', '6')
-             author = author.gsub('+', ' ')
-             author_array = author.scan(/\w+/)
-             author = author_array.first
-             author = author.gsub('0', ' ')
-             author = author.gsub('1', '.')
-             author = author.gsub('6', '-')
+           unless author == nil
+              author = author.gsub('VON', '+')
+              author = author.gsub('&', '+')
+              author = author.gsub(' ', '0')
+              author = author.gsub('.', '1')
+              author = author.gsub('Ä', '3')
+              author = author.gsub('Ü', '4')
+              author = author.gsub('Ö', '5')
+              author = author.gsub('ä', '3')
+              author = author.gsub('ü', '4')
+              author = author.gsub('ö', '5')
+              author = author.gsub('-', '6')
+              author = author.gsub('+', ' ')
+              author_array = author.scan(/\w+/)
+              author = author_array.first
+              author = author.gsub('0', ' ')
+              author = author.gsub('1', '.')
+              author = author.gsub('6', '-')
 
 
-             author = author.downcase
-             author_array = author.scan(/\w+/)
-             author = ''
-            author_array.each do |word|
-               word_a = word.first.upcase
-               word_a = 'Ä' if word.first == '3'
-               word_a = 'Ü' if word.first == '4'
-               word_a = 'Ö' if word.first == '5'
-               word_b = word.sub(word.first, '')
+              author = author.downcase
+              author_array = author.scan(/\w+/)
+              author = ''
+             author_array.each do |word|
+                word_a = word.first.upcase
+                word_a = 'Ä' if word.first == '3'
+                word_a = 'Ü' if word.first == '4'
+                word_a = 'Ö' if word.first == '5'
+                word_b = word.sub(word.first, '')
 
-               word = word_a + word_b  
-               author += word + ' '
+                word = word_a + word_b  
+                author += word + ' '
 
              end
-             author = author.gsub('3', 'ä')
-             author = author.gsub('4', 'ü')
-             author = author.gsub('5', 'ö')
+              author = author.gsub('3', 'ä')
+              author = author.gsub('4', 'ü')
+              author = author.gsub('5', 'ö')
 
 
            end
 
-          doc = (doc/"p.artikeltext")
-          text = doc.inner_text
-          text = intro + ' ' + text
-          return author, text
+            image_url = nil
+             d         = (doc/"#artikel.artikel div.artikel_main/a img")  
+            image_url = d.first.attributes['src'] unless d.blank?
+            image_url = 'http://taz.de' + image_url unless image_url == nil
+
+
+           doc = (doc/"p.artikeltext")
+           text = doc.inner_text
+           text = intro + ' ' + text
+           return author, text, nil, nil, image_url
   end
-  
+ 
   def read_cicero_blogs doc
 
 
       title = (doc/"td.header").inner_text
-    
+
       author = (doc/"div[2]/table[5]/tr[2]").inner_text
-    
+
       author = author.sub('von ', '') unless author == nil
+
+      image_url = nil
+       d         = (doc/"#rc table[3] img")  
+       #/html/body/div[2]/div/div[3]/table[3]/tbody/tr/td/img
+      image_url = d.first.attributes['src'] unless d.blank?
+      image_url = image_url.sub('../../..','')
+      image_url = 'http://www.cicero.de' + image_url unless image_url == nil
+
       doc = (doc/"table[6]")
       text = doc.inner_text
-      
+
       text = text.sub('Dieses Video ist in Zusammenarbeit mit unserem Kooperationspartner politik.de entstanden.', '' )
-      
-      return author, text, title
+
+      return author, text, title, nil, image_url
   end
 
   def read_cicero doc
@@ -809,64 +724,78 @@ end
       author = (doc/"span.red[2]").inner_html
       author = author.sub('von ', '') unless author == nil
       #intro = (doc/"span.boldRed").inner_text
+      image_url = nil
+       d         = (doc/"#mainmitrc table[5] img")  
+      image_url = d.first.attributes['src'] unless d.blank?
+      image_url = image_url.sub('../../..','')
+      image_url = 'http://www.cicero.de' + image_url unless image_url == nil
+
       doc = (doc/"table[5]")
       text = doc.inner_text
       text = text.sub('Kolumnen', '' )
-      return author, text, title
+      return author, text, title, nil, image_url
   end
 
   def read_rundschau doc
-        #roof_title = (doc/"span.dz").inner_text
-        #title = (doc/"h2.hz").inner_text
-        #title = roof_title + ': ' + title if roof_title != ''
-        author = (doc/"div.az").inner_text
-        unless author == nil
-          author = author.gsub('VON', '+')
-          author = author.gsub('Von', '+')
-          author = author.sub('Von ', '+')
-          author = author.gsub(' und ', '+')
-          author = author.gsub(' UND ', '+')
-          author = author.gsub(',', '+')
-          author = author.gsub('-', '2')
-          author = author.gsub('.', '1')
-          author = author.gsub(' ', '0')
-          author = author.gsub('?', '3')
+         #roof_title = (doc/"span.dz").inner_text
+         #title = (doc/"h2.hz").inner_text
+         #title = roof_title + ': ' + title if roof_title != ''
+         author = (doc/"div.az").inner_text
+         unless author == nil or author == ''
+           author = author.gsub('VON', '+')
+           author = author.gsub('Von', '+')
+           author = author.sub('Von ', '+')
+           author = author.gsub(' und ', '+')
+           author = author.gsub(' UND ', '+')
+           author = author.gsub(',', '+')
+           author = author.gsub('-', '2')
+           author = author.gsub('.', '1')
+           author = author.gsub(' ', '0')
+           author = author.gsub('?', '3')
 
-          author = author.gsub('+', ' ')
-          author_array = author.scan(/\w+/)
-          author = author_array[0]
-          author = author.gsub('0', ' ')
-          author = author.gsub('1', '.')
-          author = author.gsub('2', '-')
+           author = author.gsub('+', ' ')
+           author_array = author.scan(/\w+/)
+           author = author_array[0]
+           author = author.gsub('0', ' ')
+           author = author.gsub('1', '.')
+           author = author.gsub('2', '-')
 
-          author = author.downcase
-          author_array = author.scan(/\w+/)
-          author = ''
-          author_array.each do |word|
-            word_a = word.first.upcase
-            word_b = word.sub(word.first, '')
+           author = author.downcase
+           author_array = author.scan(/\w+/)
+           author = ''
+           author_array.each do |word|
+             word_a = word.first.upcase
+             word_b = word.sub(word.first, '')
 
-            word = word_a + word_b
-            author += word + ' '
-          end
-          author = author.gsub('3', '?')
-        end
-             doc = (doc/"div.text")
-        text = doc.inner_text
-        #if title.match('Seite nicht gefunden')
-        #    text = ''
-        #    title = ''
-        #    author = ''
-        #end
-        return author, text
+             word = word_a + word_b
+             author += word + ' '
+           end
+           author = author.gsub('3', '?')
+         end
+
+          image_url = nil
+           d         = (doc/"#em_body a.media_content_link img")  
+          image_url = d.first.attributes['src'] unless d.blank?
+          image_url = 'http://www.fr-online.de' + image_url unless image_url == nil
+
+
+              doc = (doc/"div.text")
+         text = doc.inner_text
+         #if title.match('Seite nicht gefunden')
+         #    text = ''
+         #    title = ''
+         #    author = ''
+         #end
+         return author, text, nil, nil, image_url
   end
-   
+
   def read_11freunde doc
       roof_title = (doc/"span.orgType").inner_text
       title = (doc/"div[2]/h1/a").inner_text
       title = title.sub('SCHLAGZEILEN' ,'')
+
       title = roof_title + ': ' + title
-      author = (doc/"div[2]/p[2]/i/span[2]").inner_html
+      author = (doc/"span.info[2]").inner_text
       author = nil if author == 'sid'
       author = '' if author == nil
 
@@ -895,35 +824,41 @@ end
 
       end
 
+      image_url = nil
+       d         = (doc/"#main div.col1_content img")  
+      image_url = d.first.attributes['src'] unless d.blank?
 
-      intro = (doc/"div[2]/p[3]/strong").inner_text
-      doc_2 = (doc/"div[2]/p[3]")
-      doc = (doc/"div[2]/p[4]")
-      text = doc.inner_text
-      
-      if text == ''
-          text_2 = doc_2.inner_text
-        else
-          text_2 = ''
-      end
-      
-      text = intro + ' ' + text + text_2
+      intro = (doc/"div.col1_content/p/strong").inner_text
+      #doc_2 = (doc/"div[2]/p[3]")
+      #doc = (doc/"div.col1_content/p")
+      text = (doc/"div.col1_content/p[4]").inner_text
+
+     # if text == ''
+    #      text_2 = doc_2.inner_text
+    #  else
+     #     text_2 = ''
+    #  end
+
+      text = intro + ' ' + text
       text = text.sub('---News, Interviews, Blogs, Statistiken und Service zu:', '') 
-      return author, text, title
+      return author, text, title, nil, image_url
   end
- 
+  
   def read_kicker doc
       roof_title = (doc/"p.topline").inner_text
       roof_title = roof_title.gsub(':', '')
       title = (doc/"h1").inner_text
       title = roof_title + ': ' + title
       title = title.sub('Hintergrundreport', '')
-      
       author = ''
+      image_url = nil
+       d         = (doc/"#art div.img-l img")  
+      image_url = d.first.attributes['src'] unless d.blank?
+      
       doc = (doc/"#art/p")
       text = doc.inner_text
       text = text.sub(roof_title, '')
-      return author, text, title
+      return author, text, title, nil, image_url
   end
  
 
@@ -1039,7 +974,7 @@ end
         finishing_time = Time.new
         duration = (finishing_time - starting_time)/60
         Eintrag.create(:name => 'German crawling completed', :duration => duration) 
-    end
+  end
   
  
   def de_find_keywords title, text
