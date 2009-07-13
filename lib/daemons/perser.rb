@@ -507,6 +507,7 @@ end
      image_url = nil
      d         = (doc/"#contentContainer div.articleBox img")
      image_url = d.first.attributes['src'] unless d.blank?
+     image_url = nil if image_url == 'http://www.welt.de/images/bg_barometer.gif' 
 
      doc = (doc/"div.articleBox/p")  
      text = doc.inner_text
