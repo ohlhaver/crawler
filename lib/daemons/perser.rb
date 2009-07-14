@@ -333,16 +333,16 @@ end
         end
 
         image_url = nil
-         d         = (doc/"#MainColumn div.ArticleImgLeft img")
-         image_url = d.first.attributes['src'] unless d.blank?
-         if image_url == nil
-           d         = (doc/"#MedContent_quelle div.ArticleImgLarge img") 
-           image_url = d.first.attributes['src'] unless d.blank?
-         end
+        # d         = (doc/"#MainColumn div.ArticleImgLeft img")
+        # image_url = d.first.attributes['src'] unless d.blank?
+        # if image_url == nil
+        #   d         = (doc/"#MedContent_quelle div.ArticleImgLarge img") 
+        #   image_url = d.first.attributes['src'] unless d.blank?
+        # end
 
 
 
-         image_url = 'http://www.faz.net' + image_url unless image_url == nil
+        # image_url = 'http://www.faz.net' + image_url unless image_url == nil
 
         doc = (doc/"div.Article/p")
         (doc/"span.Italic").remove
