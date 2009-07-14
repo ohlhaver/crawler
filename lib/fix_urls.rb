@@ -4,7 +4,7 @@ require 'uri'
 class FixUrls
   class << self
     def get_absolute_url(u, doc_url)
-      u = URI.parse(URI.encode(u))
+      u = URI.parse(u)
       return u.to_s unless u.relative?
       p,q,f =  u.select(:path, :query, :fragment)
       a_url = build_absolute_url_from_hash(get_base_url_info(doc_url).merge({:path => p, :query => q, :fragment => f}))
