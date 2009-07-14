@@ -141,6 +141,49 @@ end
             a= read_taz doc
       end
       
+      
+        if page_source_name == 'www.heise.de'
+      doc =Hpricot(open(item_link))
+      a= read_heise doc
+        end
+
+          if page_source_name == 'www.focus.de'
+        doc =Hpricot(open(item_link))
+        a= read_focus doc
+          end
+
+            if page_source_name == 'www.stern.de'
+          doc =Hpricot(open(item_link))
+          a= read_stern doc
+            end
+
+
+        if page_source_name == 'www.abendblatt.de'
+            doc =Hpricot(open(item_link))
+            a= read_abendblatt doc
+        end
+
+        if page_source_name == 'jungle-world.com'
+            doc =Hpricot(open(item_link))
+            a= read_jungle doc
+        end
+
+        if page_source_name == 'www.art-magazin.de'
+            doc =Hpricot(open(item_link))
+            a= read_art doc
+        end
+
+        if page_source_name == 'www.vanityfair.de'
+            doc =Hpricot(open(item_link))
+            a= read_vanity doc
+        end
+
+        if page_source_name == 'www.netzeitung.de'
+            doc =Hpricot(open(item_link))
+            a= read_netzeitung doc
+        end
+      
+      
        a = a.to_a
        a[0] = AuthorsApi.sanitize_author_name(a[0])
   
@@ -860,6 +903,269 @@ end
       text = doc.inner_text
       text = text.sub(roof_title, '')
       return author, text, title, nil, image_url
+  end
+ 
+  def read_heise doc
+
+
+      image_url = nil
+        d         = (doc/"#mitte_news span.bild_rechts img")
+        image_url = d.first.attributes['src'] unless d.blank?
+        image_url = 'http://www.heise.de' + image_url unless image_url == nil
+
+
+
+       doc = (doc/"div.meldung_wrapper")
+       text = doc.inner_text
+       return nil, text, nil, nil, image_url
+  end
+
+  def read_focus doc
+  author = (doc/"div[4]/div[6]/div/div/a").inner_text 
+  author = (doc/"div[5]/div[6]/div/div/a").inner_text if author == ''
+  author = (doc/"div[3]/div[6]/div/div/a").inner_text if author == ''
+
+
+
+      image_url = nil
+        d         = (doc/"#area_ct_article div.box-article-1 img")
+        image_url = d.first.attributes['src'] unless d.blank?
+        #image_url = 'http://www.heise.de' + image_url unless image_url == nil
+
+
+
+       doc = (doc/"div.f-xl")
+       (doc/"div.box-pictxt").remove
+       (doc/"div.box-art-link2").remove
+
+       text = doc.inner_text
+       return author, text, nil, nil, image_url
+  end
+
+  def read_stern doc
+     author = (doc/"div[3]/span").inner_html
+    # /html/body/div[4]/div[2]/div/div[3]/span
+     #author = (doc/"p.Author").inner_html if author == ''
+      unless author == nil or author == ''
+          author = author.sub('Von ', '+')
+          author = author.gsub(' und ', '+')
+          author = author.gsub(',', '+')
+          author = author.gsub('-', '2')
+          author = author.gsub('.', '1')
+          author = author.gsub(' ', '0')
+          author = author.gsub('ä', '3')
+          author = author.gsub('ü', '4')
+          author = author.gsub('ö', '5')
+
+          author = author.gsub('+', ' ')
+          author_array = author.scan(/\w+/)
+          author = author_array[0]
+          author = author.gsub('0', ' ')
+          author = author.gsub('1', '.')
+          author = author.gsub('2', '-')
+          author = author.gsub('3', 'ä')
+          author = author.gsub('4', 'ü')
+          author = author.gsub('5', 'ö')
+
+      end
+      author = '' if author == 'nbsp'
+
+
+      image_url = nil
+        d         = (doc/"#contMain div.bildcont img")
+        image_url = d.first.attributes['src'] unless d.blank?
+        #image_url = 'http://www.heise.de' + image_url unless image_url == nil
+
+
+
+       #intro = (doc/"div[3]/p/span").inner_text
+       (doc/"#contRight").remove
+       text = (doc/"div[3]/p").inner_text
+      # text2 = (doc/"div.article").inner_text
+    #   /html/body/div[4]/div[2]/div/div[4]/div[3]
+       # text = text + ' ' + text2
+
+
+       #(doc/"div.box-art-link2").remove
+
+       return author, text, nil, nil, image_url
+  end
+
+  def read_abendblatt doc
+     author = (doc/"span.article-author").inner_html
+
+      unless author == nil or author == ''
+          author = author.sub('Von ', '+')
+          author = author.gsub(' und ', '+')
+          author = author.gsub(',', '+')
+          author = author.gsub('-', '2')
+          author = author.gsub('.', '1')
+          author = author.gsub(' ', '0')
+          author = author.gsub('ä', '3')
+          author = author.gsub('ü', '4')
+          author = author.gsub('ö', '5')
+
+          author = author.gsub('+', ' ')
+          author_array = author.scan(/\w+/)
+          author = author_array[0]
+          author = author.gsub('0', ' ')
+          author = author.gsub('1', '.')
+          author = author.gsub('2', '-')
+          author = author.gsub('3', 'ä')
+          author = author.gsub('4', 'ü')
+          author = author.gsub('5', 'ö')
+
+      end
+      #author = '' if author == 'nbsp'
+
+
+      image_url = nil
+        d         = (doc/"#article-main-image img")
+        image_url = d.first.attributes['src'] unless d.blank?
+        #image_url = 'http://www.heise.de' + image_url unless image_url == nil
+
+
+       (doc/"#contRight").remove
+     #  intro = (doc/"#article-intro").inner_text
+       text = (doc/"div.article-page/p").inner_text
+
+       return author, text, nil, nil, image_url
+  end
+
+  def read_jungle doc
+     author = (doc/"div[4]/div/p[2]/em").inner_html
+
+      unless author == nil or author == ''
+          author = author.sub('Von ', '+')
+          author = author.sub('von ', '+')
+          author = author.sub('VON ', '+')
+          author = author.gsub(' und ', '+')
+          author = author.gsub(',', '+')
+          author = author.gsub('-', '2')
+          author = author.gsub('.', '1')
+          author = author.gsub(' ', '0')
+          author = author.gsub('ä', '3')
+          author = author.gsub('ü', '4')
+          author = author.gsub('ö', '5')
+
+          author = author.gsub('+', ' ')
+          author_array = author.scan(/\w+/)
+          if author_array[1] != nil 
+            author = author_array[1]
+          else author = author_array[0]
+          end
+          author = author.gsub('0', ' ')
+          author = author.gsub('1', '.')
+          author = author.gsub('2', '-')
+          author = author.gsub('3', 'ä')
+          author = author.gsub('4', 'ü')
+          author = author.gsub('5', 'ö')
+
+      end
+
+
+
+
+       text = (doc/"div.body").inner_text
+       opinionated = 1
+
+       return author, text, nil, nil, nil
+  end
+
+  def read_art doc
+     author = (doc/"h5.autor").inner_html
+
+      unless author == nil or author == ''
+        author = author.sub(' // ', '')
+        author = author.sub('Von ', '+')
+        author = author.gsub(' und ', '+')
+        author = author.gsub(',', '+')
+        author = author.gsub('-', '2')
+        author = author.gsub('.', '1')
+        author = author.gsub(' ', '0')
+        author = author.gsub('ä', '3')
+        author = author.gsub('ü', '4')
+        author = author.gsub('ö', '5')
+
+        author = author.gsub('+', ' ')
+        author_array = author.scan(/\w+/)
+        author = author_array[0]
+        author = author.gsub('0', ' ')
+        author = author.gsub('1', '.')
+        author = author.gsub('2', '-')
+        author = author.gsub('3', 'ä')
+        author = author.gsub('4', 'ü')
+        author = author.gsub('5', 'ö')
+
+
+      end
+      #author = '' if author == 'nbsp'
+
+
+      image_url = nil
+        d         = (doc/"img.teaserpic")
+        image_url = d.first.attributes['src'] unless d.blank?
+        image_url = 'http://www.art-magazin.de' + image_url unless image_url == nil
+
+
+       #(doc/"#contRight").remove
+       intro = (doc/"h4.vorspann").inner_text
+       text = (doc/"p.artikeltext").inner_text
+        text = intro + ' ' + text
+       return author, text, nil, nil, image_url
+  end
+
+  def read_vanity doc
+
+
+      image_url = nil
+        d         = (doc/"#context.subcl div.image img")
+        image_url = d.first.attributes['src'] unless d.blank?
+       # image_url = 'http://www.art-magazin.de' + image_url unless image_url == nil
+
+
+       #(doc/"#contRight").remove
+       intro = (doc/"#intro.center-thema-intro").inner_text
+       text = (doc/"#page1/p").inner_text
+        text = intro + ' ' + text
+       return nil, text, nil, nil, image_url
+  end
+
+  def read_netzeitung doc
+     author = (doc/"div.vorspann_artikel/i").inner_html
+
+      unless author == nil or author == ''
+          author = author.sub('Von ', '+')
+          author = author.gsub(' und ', '+')
+          author = author.gsub(',', '+')
+          author = author.gsub('-', '2')
+          author = author.gsub('.', '1')
+          author = author.gsub(' ', '0')
+          author = author.gsub('ä', '3')
+          author = author.gsub('ü', '4')
+          author = author.gsub('ö', '5')
+
+          author = author.gsub('+', ' ')
+          author_array = author.scan(/\w+/)
+          author = author_array[0]
+          author = author.gsub('0', ' ')
+          author = author.gsub('1', '.')
+          author = author.gsub('2', '-')
+          author = author.gsub('3', 'ä')
+          author = author.gsub('4', 'ü')
+          author = author.gsub('5', 'ö')
+
+      end
+      #author = '' if author == 'nbsp'
+
+
+      image_url = nil
+        d         = (doc/"#farbe_inhalt div.vorspann_artikel img")
+        image_url = d.first.attributes['src'] unless d.blank?
+
+      text = (doc/"div.vorspann_artikel/span.fliesstext/b").inner_text
+
+       return author, text, nil, nil, image_url
   end
  
 
