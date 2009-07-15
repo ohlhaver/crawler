@@ -21,14 +21,15 @@ while($running) do
   images.each do |i|
     begin
       d = open(i.baseurl)
-    rescue
-      next
-    end
+
     i.store_image(d.read, d.content_type)
     RawstoriesStoryImage.find(:all, :conditions => ["story_image_id = ?", i.id]).each do |rs|
       s = RawstoryDetail.find_by_rawstory_id(rs.rawstory_id)
       s.image_exists = true
       s.save!
+    end
+    rescue      
+      next
     end
   end
   end_time         = Time.new
