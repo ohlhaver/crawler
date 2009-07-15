@@ -1163,7 +1163,7 @@ end
         d         = (doc/"#farbe_inhalt div.vorspann_artikel img")
         image_url = d.first.attributes['src'] unless d.blank?
 
-      text = (doc/"div.vorspann_artikel/span.fliesstext/b").inner_text
+      text = (doc/"div.vorspann_artikel/span.fliesstext").inner_text
 
        return author, text, nil, nil, image_url
   end
