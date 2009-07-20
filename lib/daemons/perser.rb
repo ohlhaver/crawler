@@ -306,6 +306,7 @@ end
        d         = (doc/"#content div.imageBox img")  
       image_url = d.first.attributes['src'] unless d.blank?
       
+      (doc/"div.imageBox/p").remove
       doc = (doc/"div.text")     
       text = doc.inner_text
 
@@ -1300,6 +1301,94 @@ end
             position.delete_if {|key, value| key == nil}
 
             keywords = (position.keys).join(' ')
+            
+            if keywords != nil
+            
+            keywords=keywords.sub('—',' ')
+            
+            keywords=keywords.sub(' der ',' ')
+            keywords=keywords.sub(' die ',' ')
+            keywords=keywords.sub(' das ',' ')
+            keywords=keywords.sub(' ein ',' ')
+            keywords=keywords.sub(' eine ',' ')
+            keywords=keywords.sub(' einer ',' ')
+            keywords=keywords.sub(' sein ',' ')
+            keywords=keywords.sub(' seine ',' ')
+            keywords=keywords.sub(' ihr ',' ')
+            keywords=keywords.sub(' ihre ',' ')
+            keywords=keywords.sub(' auf ',' ')
+            keywords=keywords.sub(' von ',' ')
+            
+            keywords=keywords.sub(' vom ',' ')
+            keywords=keywords.sub(' zu ',' ')
+            keywords=keywords.sub(' wegen ',' ')
+            keywords=keywords.sub(' montag ',' ')
+            keywords=keywords.sub(' dienstag ',' ')
+            keywords=keywords.sub(' mittwoch ',' ')
+            keywords=keywords.sub(' donnerstag ',' ')
+               
+            keywords=keywords.sub(' freitag ',' ')
+            keywords=keywords.sub(' samstag ',' ')
+            keywords=keywords.sub(' sonntag ',' ')
+            keywords=keywords.sub(' hat ',' ')
+            keywords=keywords.sub(' haben ',' ')
+            keywords=keywords.sub(' hatte ',' ')
+            keywords=keywords.sub(' hatten ',' ')
+            keywords=keywords.sub(' wie ',' ')
+            keywords=keywords.sub(' wo ',' ')
+            keywords=keywords.sub(' wann ',' ')
+            keywords=keywords.sub(' wer ',' ')
+            keywords=keywords.sub(' wen ',' ')
+            keywords=keywords.sub(' wenn ',' ')
+            keywords=keywords.sub(' den ',' ')
+            keywords=keywords.sub(' dieses ',' ')    
+            keywords=keywords.sub(' heute ',' ')
+            keywords=keywords.sub(' nicht ',' ')
+            keywords=keywords.sub(' noch ',' ')
+            keywords=keywords.sub(' als ',' ')
+            keywords=keywords.sub(' zum ',' ')
+            keywords=keywords.sub(' nach ',' ')
+            keywords=keywords.sub(' vor ',' ')
+            keywords=keywords.sub(' sie ',' ')
+            keywords=keywords.sub(' sei ',' ')
+            keywords=keywords.sub(' so ',' ')
+            keywords=keywords.sub(' werde ',' ')
+            keywords=keywords.sub(' ist ',' ')
+            keywords=keywords.sub(' in ',' ')
+            keywords=keywords.sub(' es ',' ')
+            keywords=keywords.sub(' sich ',' ')
+            keywords=keywords.sub(' ob ',' ')
+            keywords=keywords.sub(' sind ',' ')
+            keywords=keywords.sub(' solche ',' ')
+            keywords=keywords.sub(' wurde ',' ')
+            keywords=keywords.sub(' dass ',' ')
+            keywords=keywords.sub(' am ',' ')
+            keywords=keywords.sub(' und ',' ')
+            keywords=keywords.sub(' oder ',' ')
+            keywords=keywords.sub(' an ',' ')
+            keywords=keywords.sub(' einige ',' ')
+            keywords=keywords.sub(' dann ',' ')
+            keywords=keywords.sub(' wird ',' ')
+            keywords=keywords.sub(' werden ',' ')
+            keywords=keywords.sub(' gab ',' ')
+            keywords=keywords.sub(' denn ',' ')
+            keywords=keywords.sub(' da ',' ')
+            keywords=keywords.sub(' des ',' ')
+            keywords=keywords.sub(' bei ',' ')
+            keywords=keywords.sub(' durch ',' ')
+            keywords=keywords.sub(' unter ',' ')
+            keywords=keywords.sub(' etwas ',' ')
+            keywords=keywords.sub(' etwa ',' ')
+            keywords=keywords.sub(' über ',' ')
+            keywords=keywords.sub(' was ',' ')
+            keywords=keywords.sub(' warum ',' ')
+            keywords=keywords.sub(' welche ',' ')
+            keywords=keywords.sub(' whelches ',' ')
+            keywords=keywords.sub(' im ',' ')
+            keywords=keywords.sub(' innerhalb ',' ')
+            keywords=keywords.sub(' mit ',' ')
+         
+           end
 
             return keywords
 
