@@ -541,27 +541,55 @@ class AuthorsApi
       }
       refined_groups
     end
-    def find_common_string_index(s1,s2)
-      i   = 0
-      s1_len = s1.size
-      s2_len = s2.size
-      len = s1_len < s2_len ? s1_len : s2_len
-      while i < len
-        break if s1[i,1] != s2[i,1]
-        i += 1
-      end
-      i -= 1
-      return i
-    end
-    def find_label(prev_label, current_string, next_string)
-      i   = find_common_string_index(prev_label,current_string)
-      j   = find_common_string_index(current_string,next_string)
-      k   =  (i > j) ? i : j
-      l_f = (k < 0)?  current_string[0,1] : (current_string[0..k] + current_string[(k+1),1])
-      return l_f
-    end
     public
+    def update_site_map
+      latest_author_id = SiteMapCategoryAuthorMap.maximum :author_id
+      authors        = Author.find(:all, 
+                                   :conditions => ["id > ?", latest_author_id],
+                                   :select => "id, name")
+      authors.reject!{|a| (a.name.to_s.size < 2 or a.rawstories.count < 1) rescue true }
+      s_cs = SiteMapAuthorSubCategory.find(:all, :limit => 2500)
+      authors.each do |a|
+        # Find the appropriate sub category
+        i = 0 
+        s_cs_size = s_cs.size
+        while i < s_cs_size
+          s_c = s_cs[i]
+          l1, l2 = s_c.label.split(' - ')
+          l2 = l2.to_s
+          n = a.name.to_s[0,30]
+          if n <= l2 or (i == s_cs_size -1)
+            # Insert in the group
+            SiteMapCategoryAuthorMap.create!(:author_id => a.id,
+                                             :category_id => s_c.category_id, 
+                                             :sub_category_id => s_c.id)  
+            # Fix labels
+            if n < l1 
+              label = "#{n} - #{l2}"
+              s_c.label = label
+              s_c.save!
+              c = s_c.category
+              ll1, ll2 = c.label.split(' - ') 
+              if n < ll1
+                label = "#{n} - #{ll2.to_s}"
+                c.label = label
+                c.save!
+              end
+            end
+            puts "i = #{i}"
+            puts s_c.inspect
+            break
+          end
+          i += 1
+        end
+      end
+    end
     def create_site_map
+      # Find the old site map
+      old_cs = SiteMapAuthorCategory.find(:all, :select => "id").collect{|c| c.id}
+      old_s_cs = SiteMapAuthorSubCategory.find(:all, :select => "id").collect{|c| c.id}
+      old_a_ms = SiteMapCategoryAuthorMap.find(:all, :select => "id").collect{|a| a.id}
+
       authors        = Author.find(:all, 
                                    :select => 'id, name')
       authors.reject!{|a| (a.name.to_s.size < 2 or a.rawstories.count < 1) rescue true }.sort_by{|a| a.name}
@@ -572,7 +600,6 @@ class AuthorsApi
       items_per_group =  ( authors_size % no_of_groups  > 0 ) ?  items_per_group + 1 : items_per_group
       # Partition the authors into categories and sub categories
       author_groups = []
-      puts items_per_group.to_s
       i = 0
       while i < authors_size
         author_groups << authors[i, items_per_group]
@@ -588,16 +615,18 @@ class AuthorsApi
       super_groups.each do |s_g|
         label = "#{s_g.first.first.name.to_s[0,30]} - #{s_g.last.last.name.to_s[0,30]}"
         c = SiteMapAuthorCategory.create!(:label => label)
-        puts "#{c.id}"
         s_g.each do |a_g|
           label = "#{a_g.first.name.to_s[0,30]} - #{a_g.last.name.to_s[0,30]}"
           s_c = SiteMapAuthorSubCategory.create!(:label => label, :category_id => c.id)
-          puts "#{c.id} , #{s_c.id}"
           a_g.each do |a|
             SiteMapCategoryAuthorMap.create!(:author_id => a.id, :category_id => c.id,:sub_category_id => s_c.id)
           end
         end
       end
+      # Delete old Site map
+      SiteMapCategoryAuthorMap.delete(old_a_ms) unless old_a_ms.blank?
+      SiteMapAuthorSubCategory.delete(old_s_cs) unless old_s_cs.blank?
+      SiteMapAuthorCategory.delete(old_cs)      unless old_cs.blank?
     end
   end
 end
