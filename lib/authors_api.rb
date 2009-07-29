@@ -541,6 +541,63 @@ class AuthorsApi
       }
       refined_groups
     end
+    def find_common_string_index(s1,s2)
+      i   = 0
+      s1_len = s1.size
+      s2_len = s2.size
+      len = s1_len < s2_len ? s1_len : s2_len
+      while i < len
+        break if s1[i,1] != s2[i,1]
+        i += 1
+      end
+      i -= 1
+      return i
+    end
+    def find_label(prev_label, current_string, next_string)
+      i   = find_common_string_index(prev_label,current_string)
+      j   = find_common_string_index(current_string,next_string)
+      k   =  (i > j) ? i : j
+      l_f = (k < 0)?  current_string[0,1] : (current_string[0..k] + current_string[(k+1),1])
+      return l_f
+    end
+    public
+    def create_site_map
+      authors        = Author.find(:all, 
+                                   :select => 'id, name')
+      authors.reject!{|a| (a.name.to_s.size < 2 or a.rawstories.count < 1) rescue true }.sort_by{|a| a.name}
 
+      authors_size   = authors.size
+      no_of_groups   = 50 * 50
+      items_per_group = authors_size/no_of_groups
+      items_per_group =  ( authors_size % no_of_groups  > 0 ) ?  items_per_group + 1 : items_per_group
+      # Partition the authors into categories and sub categories
+      author_groups = []
+      puts items_per_group.to_s
+      i = 0
+      while i < authors_size
+        author_groups << authors[i, items_per_group]
+        i += items_per_group
+      end
+      super_groups = []
+      i = 0
+      author_groups_size = author_groups.size 
+      while i < author_groups_size
+        super_groups << author_groups[i,50]
+        i += 50
+      end
+      super_groups.each do |s_g|
+        label = "#{s_g.first.first.name.to_s[0,30]} - #{s_g.last.last.name.to_s[0,30]}"
+        c = SiteMapAuthorCategory.create!(:label => label)
+        puts "#{c.id}"
+        s_g.each do |a_g|
+          label = "#{a_g.first.name.to_s[0,30]} - #{a_g.last.name.to_s[0,30]}"
+          s_c = SiteMapAuthorSubCategory.create!(:label => label, :category_id => c.id)
+          puts "#{c.id} , #{s_c.id}"
+          a_g.each do |a|
+            SiteMapCategoryAuthorMap.create!(:author_id => a.id, :category_id => c.id,:sub_category_id => s_c.id)
+          end
+        end
+      end
+    end
   end
 end
