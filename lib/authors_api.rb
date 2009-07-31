@@ -576,8 +576,6 @@ class AuthorsApi
                 c.save!
               end
             end
-            puts "i = #{i}"
-            puts s_c.inspect
             break
           end
           i += 1
@@ -586,13 +584,11 @@ class AuthorsApi
     end
     def create_site_map
       # Find the old site map
-      old_cs = SiteMapAuthorCategory.find(:all, :select => "id").collect{|c| c.id}
-      old_s_cs = SiteMapAuthorSubCategory.find(:all, :select => "id").collect{|c| c.id}
-      old_a_ms = SiteMapCategoryAuthorMap.find(:all, :select => "id").collect{|a| a.id}
 
       authors        = Author.find(:all, 
                                    :select => 'id, name')
-      authors.reject!{|a| (a.name.to_s.size < 2 or a.rawstories.count < 1) rescue true }.sort_by{|a| a.name}
+      #authors.reject!{|a| (a.name.to_s.size < 2 or a.rawstories.count < 1) rescue true }.sort_by{|a| a.name}
+      authors.reject!{|a| a.name.to_s.size < 2 }.sort_by{|a| a.name}
 
       authors_size   = authors.size
       no_of_groups   = 50 * 50
@@ -623,10 +619,6 @@ class AuthorsApi
           end
         end
       end
-      # Delete old Site map
-      SiteMapCategoryAuthorMap.delete(old_a_ms) unless old_a_ms.blank?
-      SiteMapAuthorSubCategory.delete(old_s_cs) unless old_s_cs.blank?
-      SiteMapAuthorCategory.delete(old_cs)      unless old_cs.blank?
     end
   end
 end
