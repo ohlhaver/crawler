@@ -182,6 +182,42 @@ end
             doc =Hpricot(open(item_link))
             a= read_netzeitung doc
         end
+        
+        if page_source_name == 'www.freitag.de'
+            doc =Hpricot(open(item_link))
+            a= read_freitag doc
+        end
+
+        if page_source_name == 'www.europolitan.de'
+            f = open(item_link)
+              f.rewind
+              doc = Hpricot(Iconv.conv('utf-8', f.charset, f.readlines.join("\n")))
+            a= read_europolitan doc
+        end
+
+        if page_source_name == 'www.dw-world.de'
+            doc =Hpricot(open(item_link))
+            a= read_dw doc
+        end
+
+        if page_source_name == 'bernerzeitung.ch'
+            doc =Hpricot(open(item_link))
+            a= read_bernerzeitung doc
+        end
+
+        if page_source_name == 'kurier.at'
+            f = open(item_link)
+               f.rewind
+               doc = Hpricot(Iconv.conv('utf-8', f.charset, f.readlines.join("\n")))
+            a= read_kurier doc
+        end
+
+        if page_source_name == 'www.cinema.de'
+            doc =Hpricot(open(item_link))
+            a= read_cinema doc
+        end
+        
+        
       
       
        a = a.to_a
@@ -1170,6 +1206,194 @@ end
   end
  
 
+  def read_freitag doc
+    author = (doc/"span.autor_redaktion").inner_html
+     author = (doc/"span.autor_syndication").inner_html if author == ''
+
+      unless author == nil or author == ''
+          author = author.sub('Von ', '+')
+          author = author.gsub(' und ', '+')
+          author = author.gsub(',', '+')
+          author = author.gsub('-', '2')
+          author = author.gsub('.', '1')
+          author = author.gsub(' ', '0')
+          author = author.gsub('ä', '3')
+          author = author.gsub('ü', '4')
+          author = author.gsub('ö', '5')
+          author = author.gsub('`', '6')
+
+
+          author = author.gsub('+', ' ')
+          author_array = author.scan(/\w+/)
+          author = author_array[0]
+          author = author.gsub('0', ' ')
+          author = author.gsub('1', '.')
+          author = author.gsub('2', '-')
+          author = author.gsub('3', 'ä')
+          author = author.gsub('4', 'ü')
+          author = author.gsub('5', 'ö')
+          author = author.gsub('6', '`')
+
+      end
+
+  author = author.sub(' ', '')
+
+      image_url = nil
+        d         = (doc/"#portal-columns div.image img")
+
+        image_url = d.first.attributes['src'] unless d.blank?
+
+
+       intro = (doc/"div.artikel_content/h3").inner_text
+       text = (doc/"div.artikel_content/div/p").inner_text
+       text = intro + ' ' + text
+
+       return author, text, nil, nil, image_url
+  end
+
+  def read_europolitan doc
+    author = (doc/"span.text12").inner_html
+     #author = (doc/"span.autor_syndication").inner_html if author == ''
+
+      unless author == nil or author == ''
+          author = author.sub('Von ', '+')
+          author = author.sub('von ', '+')
+          author = author.gsub(' und ', '+')
+          author = author.gsub(',', '+')
+          author = author.gsub('-', '2')
+          author = author.gsub('.', '1')
+          author = author.gsub(' ', '0')
+          author = author.gsub('Ä', '3')
+          author = author.gsub('Ü', '4')
+          author = author.gsub('Ö', '5')
+          author = author.gsub('`', '6')
+          author = author.gsub('?', '7')
+
+
+          author = author.gsub('+', ' ')
+          author_array = author.scan(/\w+/)
+          author = author_array[1]
+          author = author.gsub('0', ' ')
+          author = author.gsub('1', '.')
+          author = author.gsub('2', '-')
+          author = author.gsub('3', 'Ä')
+          author = author.gsub('4', 'Ü')
+          author = author.gsub('5', 'Ö')
+          author = author.gsub('6', '`')
+          author = author.gsub('7', '?')
+
+      end
+
+  #author = author.sub(' ', '')
+
+      image_url = nil
+      d=nil
+    d         = (doc/"div.news_box/img.newspic2")
+     d         = (doc/"div.news_box/img.newspic")  if d.blank?
+     #   d         = (doc/"img.newspic") #if d == ''
+
+        image_url = d.first.attributes['src'] unless d.blank?
+    (doc/"blockquote.pullquote_r").remove
+
+       intro = (doc/"div.artikel_content/h3").inner_text
+       text = (doc/"div.news_box/p").inner_text
+       text = intro + ' ' + text
+
+
+
+       return author, text, nil, nil, image_url
+  end
+
+  def read_dw doc
+
+      image_url = nil
+      d=nil
+    d         = (doc/"#mainContent div.picBoxDetailTop img")
+
+
+        image_url = d.first.attributes['src'] unless d.blank?
+    (doc/"i.caption").remove
+
+       intro = (doc/"h4.detailContentTeasertext").inner_text
+       text = (doc/"div.detailContent/p").inner_text
+       text = intro + ' ' + text
+
+
+
+       return nil, text, nil, nil, image_url
+  end
+
+  def read_bernerzeitung doc
+
+
+      image_url = nil
+
+    d         = (doc/"#articlefeature")
+    d         = (doc/"img.contentboxbild") if d.blank?
+
+
+
+        image_url = d.first.attributes['src'] unless d.blank?
+    (doc/"p.caption").remove
+    (doc/"p.publishedDate").remove
+
+
+       text = (doc/"#singleLeft/p").inner_text
+
+
+
+
+       return nil, text, nil, nil, image_url
+  end
+
+  def read_kurier doc
+
+      image_url = nil
+
+    d         = (doc/"#content span.imgborder img")
+
+
+    image_url = d.first.attributes['src'] unless d.blank?
+    (doc/"span.imgsuper/span").remove
+    (doc/"span.drucken").remove
+    (doc/"span.versenden").remove
+    (doc/"span.leserbrief").remove
+    (doc/"span.kommentieren").remove
+    (doc/"#author").remove
+    intro = (doc/"#content/h3").inner_text
+    text = (doc/"#content/p").inner_text
+    text = intro + ' ' + text
+    text = text.sub("addthis_pub    = 'kurier'", '')
+    text = text.sub("favorites, delicious, digg, google, myspace, live, twitter, misterwong, facebook, more", '')
+    text = text.sub("addthis_options = ''", '')
+
+       return nil, text, nil, nil, image_url
+  end
+
+ 
+  def read_cinema doc
+
+
+      image_url = nil
+
+    d         = (doc/"#mainContent div.movieOverview img")
+
+
+        image_url = d.first.attributes['src'] unless d.blank?
+    (doc/"blockquote.pullquote_r").remove
+
+
+    (doc/"div.teaserRow").remove    
+       text = (doc/"div.clearfix/p").inner_text
+
+
+
+
+       return nil, text, nil, nil, image_url
+  end
+
+
+
   def de_create
       Eintrag.create(:name => 'German crawling started') 
       starting_time = Time.new
@@ -1383,7 +1607,7 @@ end
             keywords=keywords.sub(' was ',' ')
             keywords=keywords.sub(' warum ',' ')
             keywords=keywords.sub(' welche ',' ')
-            keywords=keywords.sub(' whelches ',' ')
+            keywords=keywords.sub(' welches ',' ')
             keywords=keywords.sub(' im ',' ')
             keywords=keywords.sub(' innerhalb ',' ')
             keywords=keywords.sub(' mit ',' ')

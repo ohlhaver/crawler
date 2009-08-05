@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 21) do
+ActiveRecord::Schema.define(:version => 22) do
 
   create_table "author_maps", :force => true do |t|
     t.integer  "author_id",        :limit => 11
@@ -263,6 +263,27 @@ ActiveRecord::Schema.define(:version => 21) do
   add_index "recommendations", ["recommender_id"], :name => "index_recommendations_on_recommender_id"
   add_index "recommendations", ["user_id"], :name => "index_recommendations_on_user_id"
   add_index "recommendations", ["resource_id"], :name => "index_recommendations_on_resource_id"
+
+  create_table "site_map_author_categories", :force => true do |t|
+    t.string "label"
+  end
+
+  create_table "site_map_author_sub_categories", :force => true do |t|
+    t.string  "label"
+    t.integer "category_id", :limit => 11
+  end
+
+  add_index "site_map_author_sub_categories", ["category_id"], :name => "index_site_map_author_sub_categories_on_category_id"
+
+  create_table "site_map_category_author_maps", :force => true do |t|
+    t.integer "author_id",       :limit => 11
+    t.integer "sub_category_id", :limit => 11
+    t.integer "category_id",     :limit => 11
+  end
+
+  add_index "site_map_category_author_maps", ["author_id"], :name => "index_site_map_category_author_maps_on_author_id"
+  add_index "site_map_category_author_maps", ["sub_category_id"], :name => "index_site_map_category_author_maps_on_sub_category_id"
+  add_index "site_map_category_author_maps", ["category_id"], :name => "index_site_map_category_author_maps_on_category_id"
 
   create_table "sources", :force => true do |t|
     t.string   "name"
