@@ -252,7 +252,7 @@ end
       #   title = roof +': ' + title if roof != ''
                             
          intro = (doc/"p.spIntrotext/strong").inner_html
-         author = (doc/"p.spAutorenzeile/a[1]").inner_html
+         author = (doc/"p.spAuthor/a").inner_html
          if author == ''
          author = (doc/"p.spAutorenzeile").inner_html 
          if author != ''
@@ -290,10 +290,10 @@ end
          end
 
      image_url = nil
-     d         = (doc/"#spArticleBody div.spArticleImageBox img")
+     d         = (doc/"#spArticleTopAsset div.spArticleImageBox img")
      image_url = d.first.attributes['src'] unless d.blank?
 
-         doc = (doc/"#spArticleBody/p")
+         doc = (doc/"#spArticleColumn/p")
          
          (doc/"div.spAsset").remove
          (doc/"div.spArticleImageBox").remove
@@ -497,7 +497,7 @@ end
      title = (doc/"div.articletext/h2").inner_text
      title = roof_title + ': ' + title if roof_title != ''
 
-     author = (doc/"cite.author").inner_html
+     author = (doc/"li.author/a").inner_html
      author_array = author.split(/\|/)
      author = author_array.first.sub('Von ', '') unless author_array.first == nil 
      author = author.chop
@@ -506,8 +506,9 @@ end
      d         = (doc/"#content div.image_full img")
      image_url = d.first.attributes['src'] unless d.blank?
 
-     doc = (doc/"div.articlebody/p")
-     text = doc.inner_text
+     intro = (doc/"#main.article/p")
+     doc = (doc/"p.excerpt")
+     text = intro.inner_text + ' ' + doc.inner_text
 
 
      return author, text ,title, nil, image_url
@@ -548,7 +549,7 @@ end
           end
 
           image_url = nil
-          d         = (doc/"#article div.article img")
+          d         = (doc/"#article div.teaser img")
           image_url = d.first.attributes['src'] unless d.blank?
           image_url = 'http://www.nzz.ch' + image_url unless image_url == nil
           image_url = nil if image_url == 'http://www.nzz.ch/static-images/pixel.gif'
@@ -596,42 +597,47 @@ end
   
   def read_ftd doc
 
-      roof_title = (doc/"h1.dach").inner_text
-      title = (doc/"h2.artikelhead").inner_text
-      title = roof_title + ': ' + title if roof_title != '' 
-      title = title.sub('Dossier ', '')
-      author = (doc/"h4.bot").inner_text
+       roof_title = (doc/"h1.dach").inner_text
+       title = (doc/"h2.artikelhead").inner_text
+       title = roof_title + ': ' + title if roof_title != '' 
+       title = title.sub('Dossier ', '')
+       author = (doc/"span.authors/a.icon").inner_text
 
-      unless author == nil or author == ''
-          author = author.sub('von ', '+') 
-          author = author.gsub('und', '+')
-          author = author.gsub(',', '+')
-          author = author.gsub('-', '2')
-          author = author.gsub('.', '1')
-          author = author.gsub(' ', '0')
-          author = author.gsub('ä', '3')
-          author = author.gsub('ü', '4')
-          author = author.gsub('ö', '5')
+       unless author == nil or author == ''
+           author = author.sub('von ', '+') 
+           author = author.gsub('und', '+')
+           author = author.gsub(',', '+')
+           author = author.gsub('-', '2')
+           author = author.gsub('.', '1')
+           author = author.gsub(' ', '0')
+           author = author.gsub('ä', '3')
+           author = author.gsub('ü', '4')
+           author = author.gsub('ö', '5')
 
-          author = author.gsub('+', ' ')
-          author_array = author.scan(/\w+/)
-          author = author_array[0]
-          author = author.gsub('0', ' ')
-          author = author.gsub('1', '.')
-          author = author.gsub('2', '-')
-          author = author.gsub('3', 'ä')
-          author = author.gsub('4', 'ü')
-          author = author.gsub('5', 'ö')
+           author = author.gsub('+', ' ')
+           author_array = author.scan(/\w+/)
+           author = author_array[0]
+           author = author.gsub('0', ' ')
+           author = author.gsub('1', '.')
+           author = author.gsub('2', '-')
+           author = author.gsub('3', 'ä')
+           author = author.gsub('4', 'ü')
+           author = author.gsub('5', 'ö')
 
-      end
-      intro = (doc/"h3.anlauf").inner_text
-      doc = (doc/"div.artikeltext/p")
-      text = doc.inner_text
+       end
 
-      text = intro + ' ' + text
-      return author, text, title
+       image_url = nil
+        d         = (doc/"#MainColumn div.imageLegend img")
+        image_url = d.first.attributes['src'] unless d.blank?
+
+       intro = (doc/"div.boxIntroHead/h3").inner_text
+       doc = (doc/"div.paragraph")
+       text = doc.inner_text
+
+       text = intro + ' ' + text
+       return author, text, title
   end
-
+  
   def read_derstandard doc
       author = (doc/"p.Author").inner_html
 
