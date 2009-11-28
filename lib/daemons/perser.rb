@@ -305,7 +305,7 @@ end
          text = doc.inner_text
          text = intro + ' ' + text + ' ' + roof
 
-         return author, text, title, nil, image_url
+         return author, text, nil, nil, image_url
   end
 
 
@@ -346,7 +346,7 @@ end
       doc = (doc/"div.text")     
       text = doc.inner_text
 
-      return author, text, title, nil, image_url
+      return author, text, nil, nil, image_url
   end
   
   def read_tagesspiegel doc
@@ -511,7 +511,7 @@ end
      text = intro.inner_text + ' ' + doc.inner_text
 
 
-     return author, text ,title, nil, image_url
+     return author, text, nil, nil, image_url
   end
 
   def read_nzz doc
@@ -559,8 +559,7 @@ end
       text = doc.inner_text
       text = intro + ' ' + text
       title = nil
-      return author, text , title, opinionated #, image_url
-  end
+      return author, text, nil, nil#, image_url
 
   def read_welt doc
       author = (doc/"span.author").inner_text
@@ -635,7 +634,7 @@ end
        text = doc.inner_text
 
        text = intro + ' ' + text
-       return author, text, title
+      return author, text, nil, nil, image_url
   end
   
   def read_derstandard doc
@@ -803,7 +802,7 @@ end
 
       text = text.sub('Dieses Video ist in Zusammenarbeit mit unserem Kooperationspartner politik.de entstanden.', '' )
 
-      return author, text, title, nil, image_url
+      return author, text, nil, nil, image_url
   end
 
   def read_cicero doc
@@ -820,7 +819,7 @@ end
       doc = (doc/"table[5]")
       text = doc.inner_text
       text = text.sub('Kolumnen', '' )
-      return author, text, title, nil, image_url
+      return author, text, nil, nil, image_url
   end
 
   def read_rundschau doc
@@ -928,7 +927,7 @@ end
 
       text = intro + ' ' + text
       text = text.sub('---News, Interviews, Blogs, Statistiken und Service zu:', '') 
-      return author, text, title, nil, image_url
+      return author, text, nil, nil, image_url
   end
   
   def read_kicker doc
