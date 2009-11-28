@@ -634,7 +634,7 @@ end
        text = doc.inner_text
 
        text = intro + ' ' + text
-      return author, text, nil, nil, image_url
+      return author, text, nil, nil
   end
   
   def read_derstandard doc
