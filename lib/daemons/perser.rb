@@ -559,7 +559,8 @@ end
       text = doc.inner_text
       text = intro + ' ' + text
       title = nil
-      return author, text, nil, nil#, image_url
+      return author, text, nil, nil #, image_url
+  end
 
   def read_welt doc
       author = (doc/"span.author").inner_text
