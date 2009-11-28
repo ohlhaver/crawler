@@ -548,18 +548,18 @@ end
 
           end
 
-          image_url = nil
-          d         = (doc/"#article div.teaser img")
-          image_url = d.first.attributes['src'] unless d.blank?
-          image_url = 'http://www.nzz.ch' + image_url unless image_url == nil
-          image_url = nil if image_url == 'http://www.nzz.ch/static-images/pixel.gif'
+        #  image_url = nil
+        #  d         = (doc/"#article div.teaser img")
+        #  image_url = d.first.attributes['src'] unless d.blank?
+        #  image_url = 'http://www.nzz.ch' + image_url unless image_url == nil
+        #  image_url = nil if image_url == 'http://www.nzz.ch/static-images/pixel.gif'
 
       intro = (doc/"div.body/h5").inner_text  
       doc = (doc/"div.body/p")
       text = doc.inner_text
       text = intro + ' ' + text
       title = nil
-      return author, text , title, opinionated, image_url
+      return author, text , title, opinionated #, image_url
   end
 
   def read_welt doc
